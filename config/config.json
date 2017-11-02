@@ -8,6 +8,9 @@
     "dialect": "mssql",
     "dialectOptions": {
       "encrypt": true
+    },
+    "define": {
+      "timestamps": false
     }
   }
 }
