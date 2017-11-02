@@ -13,7 +13,8 @@ var models = require('../models');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '443');
+var port = process.env.PORT || '3333';
+// var port = normalizePort(process.env.PORT || '443');
 app.set('port', port);
 /**
  * Create HTTP server.
