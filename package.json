@@ -13,6 +13,8 @@
     "jade": "~1.11.0",
     "morgan": "~1.8.1",
     "mysql2": "^1.4.2",
+    "pg": "^7.3.0",
+    "pg-hstore": "^2.3.2",
     "sequelize": "^4.13.17",
     "serve-favicon": "~2.4.2",
     "tedious": "^2.0.1"
