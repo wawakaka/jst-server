@@ -1,5 +1,6 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
+
   var DetailPengeluaran = sequelize.define('DetailPengeluaran', {
     idDetailPengeluaran: {
       type: DataTypes.INTEGER,
@@ -11,11 +12,13 @@ module.exports = function(sequelize, DataTypes) {
     keterangan: DataTypes.TEXT,
     gambar: DataTypes.STRING,
     tanggal: {
-      type: Sequelize.DATE, defaultValue: Sequelize.NOW,
+      type: DataTypes.DATE, defaultValue: DataTypes.NOW,
     },
   });
+
   DetailPengeluaran.associate = function(models) {
     DetailPengeluaran.belongsTo(models.Pengeluaran);
   };
+
   return DetailPengeluaran;
 };

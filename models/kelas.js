@@ -10,7 +10,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     isPrivate: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false
+      defaultValue: false,
       allowNull: false,
     },
   });

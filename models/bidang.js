@@ -1,15 +1,17 @@
 'use strict';
-module.exports = function (sequelize, DataTypes) {
+module.exports = function(sequelize, DataTypes) {
+
   var Bidang = sequelize.define('Bidang', {
-    idBidang: {
-      type: DataTypes.INTEGER,
+    namaBidang: {
+      type: DataTypes.STRING,
       primaryKey: true,
-      autoIncrement: true,
+      allowNull: false,
     },
-    namaBidang: DataTypes.STRING
   });
-  Bidang.associate = function (models) {
+
+  Bidang.associate = function(models) {
     Bidang.hasMany(models.Kelas);
-  }
+  };
+
   return Bidang;
 };
