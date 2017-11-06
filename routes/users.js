@@ -2,8 +2,8 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models');
 
-router.get('/:idUser', getUser());
-router.get('/all', getAllUser());
+router.get('/id/:idUser', getUser());
+router.get('/email/:email', getUserByEmail());
 router.post('/create', createUser());
 router.put('/:idUser/edit', editUser());
 
@@ -13,7 +13,7 @@ function getUser() {
       if (users) {
         res.status(200).json({
           status: 'success',
-          message: 'new user added',
+          message: 'retrieve user',
           data: users,
         });
       }
@@ -29,20 +29,22 @@ function getUser() {
   };
 }
 
-function getAllUser() {
+function getUserByEmail() {
   return function(req, res) {
-    models.User.all({
-      include: [
-        {
-          model: models.Kelas,
-          as: 'kelas',
-        }],
-    }).then(function(users) {
-      res.status(200).json({
-        status: 'success',
-        message: 'retrieve user',
-        data: users,
-      });
+    models.User.findById(req.params.email).then(function(users) {
+      if (users) {
+        res.status(200).json({
+          status: 'success',
+          message: 'retrieve user',
+          data: users,
+        });
+      }
+      else {
+        res.status(404).json({
+          status: 'failed',
+          message: 'not found',
+        });
+      }
     }).catch(function(err) {
       res.send(err);
     });
