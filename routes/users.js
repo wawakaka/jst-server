@@ -41,9 +41,7 @@ function getUserByEmail() {
       }
       else if (res.status(404)) {
         res.status(404).json({
-          status: 'success',
           message: 'not found',
-          data: users,
         });
       }
       else {
