@@ -39,8 +39,15 @@ function getUserByEmail() {
           data: users,
         });
       }
-      else {
+      else if (res.status(404)) {
         res.status(404).json({
+          status: 'success',
+          message: 'not found',
+          data: users,
+        });
+      }
+      else {
+        res.json({
           status: 'failed',
           message: 'not found',
         });
