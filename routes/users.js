@@ -3,13 +3,22 @@ var router = express.Router();
 var models = require('../models');
 
 router.post('/login/:email', login());
-router.get('/email/:email', getUserByEmail());
+router.get('/:email', getUserByEmail());
 router.post('/create', createUser());
 router.put('/:email', editUser());
 
 function login() {
   return function(req, res) {
-    models.User.findById(req.params.email).then(function(users) {
+    models.User.findById(
+        req.params.email,
+        {
+          include: [
+            {
+              model: models.Kelas,
+              as: 'kelas',
+            }],
+        }
+    ).then(function(users) {
       if (users) {
         res.status(200).json({
           status: 'success',
@@ -45,7 +54,16 @@ function login() {
 
 function getUserByEmail() {
   return function(req, res) {
-    models.User.findById(req.params.email).then(function(users) {
+    models.User.findById(
+        req.params.email,
+        {
+          include: [
+            {
+              model: models.Kelas,
+              as: 'kelas',
+            }],
+        }
+    ).then(function(users) {
       if (users) {
         res.status(200).json({
           status: 'success',
@@ -61,7 +79,7 @@ function getUserByEmail() {
       else {
         res.json({
           status: 'failed',
-          message: 'not found',
+          message: 'error',
         });
       }
     }).catch(function(err) {
