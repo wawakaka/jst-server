@@ -5,7 +5,7 @@ var models = require('../models');
 router.post('/login/:email', login());
 router.get('/email/:email', getUserByEmail());
 router.post('/create', createUser());
-router.put('/:idUser/edit', editUser());
+router.put('/:email', editUser());
 
 function login() {
   return function(req, res) {
@@ -89,7 +89,7 @@ function createUser() {
 
 function editUser() {
   return function(req, res) {
-    models.User.findById(req.params.idUser).then(function(users) {
+    models.User.findById(req.params.email).then(function(users) {
       if (users) {
         users.update({
           nama: req.body.nama,
@@ -97,6 +97,7 @@ function editUser() {
         res.status(200).json({
           status: 'success',
           message: 'user updated',
+          data: users,
         });
       }
       else {
