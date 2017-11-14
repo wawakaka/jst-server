@@ -1,5 +1,7 @@
 # JST
 
+<a href="https://travis-ci.org/wawakaka/jst-server"><img src="https://travis-ci.org/wawakaka/jst-server.svg?branch=master"></a>
+
 This repository Lorem Ipsum is simply dummy 
 text of the printing and typesetting industry. 
 Lorem Ipsum has been the industry's standard dummy 
