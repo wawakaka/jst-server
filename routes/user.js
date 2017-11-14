@@ -6,18 +6,12 @@ router.post('/login/:email', login());
 router.get('/:email', getUserByEmail());
 router.post('/create', createUser());
 router.put('/:email', editUser());
+router.put('/:email/activate', activateUser());
 
 function login() {
   return function(req, res) {
-    models.User.findById(
-        req.params.email,
-        {
-          include: [
-            {
-              model: models.Kelas,
-              as: 'kelas',
-            }],
-        }
+    models.user.findById(
+        req.params.email
     ).then(function(users) {
       if (users) {
         res.status(200).json({
@@ -54,15 +48,8 @@ function login() {
 
 function getUserByEmail() {
   return function(req, res) {
-    models.User.findById(
-        req.params.email,
-        {
-          include: [
-            {
-              model: models.Kelas,
-              as: 'kelas',
-            }],
-        }
+    models.user.findById(
+        req.params.email
     ).then(function(users) {
       if (users) {
         res.status(200).json({
@@ -90,7 +77,7 @@ function getUserByEmail() {
 
 function createUser() {
   return function(req, res) {
-    models.User.create({
+    models.user.create({
       nama: req.body.nama,
       email: req.body.email,
     }).then(function(users) {
@@ -107,7 +94,7 @@ function createUser() {
 
 function editUser() {
   return function(req, res) {
-    models.User.findById(req.params.email).then(function(users) {
+    models.user.findById(req.params.email).then(function(users) {
       if (users) {
         users.update({
           nama: req.body.nama,
@@ -115,6 +102,31 @@ function editUser() {
         res.status(200).json({
           status: 'success',
           message: 'user updated',
+          data: users,
+        });
+      }
+      else {
+        res.status(404).json({
+          status: 'failed',
+          message: 'not found',
+        });
+      }
+    }).catch(function(err) {
+      res.send(err);
+    });
+  };
+}
+
+function activateUser() {
+  return function(req, res) {
+    models.user.findById(req.params.email).then(function(users) {
+      if (users) {
+        users.update({
+          is_active: req.body.is_active,
+        });
+        res.status(200).json({
+          status: 'success',
+          message: 'user is activated now',
           data: users,
         });
       }

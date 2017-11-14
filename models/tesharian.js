@@ -2,18 +2,26 @@
 
 module.exports = function(sequelize, DataTypes) {
 
-  var TesHarian = sequelize.define('TesHarian', {
-    idTes: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    keterangan: DataTypes.TEXT,
-  });
+  var TesHarian = sequelize.define(
+      'tes_harian',
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          primaryKey: true,
+          autoIncrement: true,
+        },
+        keterangan: DataTypes.TEXT,
+      },
+      {
+        freezeTableName: true,
+        tableName: 'tes_harian',
+        underscored: true,
+      }
+  );
 
   TesHarian.associate = function(models) {
-    TesHarian.hasMany(models.HasilTesHarian, {as: 'hasilTesHarian'});
-    TesHarian.belongsTo(models.JadwalKelas);
+    TesHarian.hasMany(models.hasil_tes_harian, {as: 'hasil_tes_harian'});
+    TesHarian.belongsTo(models.jadwal_kelas);
   };
 
   return TesHarian;
