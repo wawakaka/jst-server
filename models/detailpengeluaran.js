@@ -1,23 +1,32 @@
 'use strict';
+
 module.exports = function(sequelize, DataTypes) {
 
-  var DetailPengeluaran = sequelize.define('DetailPengeluaran', {
-    idDetailPengeluaran: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    namaBarang: DataTypes.STRING,
-    biaya: DataTypes.INTEGER,
-    keterangan: DataTypes.TEXT,
-    gambar: DataTypes.STRING,
-    tanggal: {
-      type: DataTypes.DATE, defaultValue: DataTypes.NOW,
-    },
-  });
+  var DetailPengeluaran = sequelize.define(
+      'detail_pengeluaran',
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          primaryKey: true,
+          autoIncrement: true,
+        },
+        barang: DataTypes.STRING,
+        biaya: DataTypes.INTEGER,
+        keterangan: DataTypes.TEXT,
+        gambar: DataTypes.STRING,
+        tanggal: {
+          type: DataTypes.DATE, defaultValue: DataTypes.NOW,
+        },
+      },
+      {
+        freezeTableName: true,
+        tableName: 'detail_pengeluaran',
+        underscored: true,
+      }
+  );
 
   DetailPengeluaran.associate = function(models) {
-    DetailPengeluaran.belongsTo(models.Pengeluaran);
+    DetailPengeluaran.belongsTo(models.pengeluaran);
   };
 
   return DetailPengeluaran;

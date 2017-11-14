@@ -2,22 +2,30 @@
 
 module.exports = function(sequelize, DataTypes) {
 
-  var Sekolah = sequelize.define('Sekolah', {
-    idSekolah: {
-      type: DataTypes.STRING,
-      primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
-      allowNull: false,
-    },
-    namaSekolah: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-  });
+  var Sekolah = sequelize.define(
+      'sekolah',
+      {
+        id: {
+          type: DataTypes.STRING,
+          primaryKey: true,
+          defaultValue: DataTypes.UUIDV4,
+          allowNull: false,
+        },
+        nama: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+      },
+      {
+        freezeTableName: true,
+        tableName: 'sekolah',
+        underscored: true,
+      }
+  );
 
   Sekolah.associate = function(models) {
-    Sekolah.hasMany(models.Siswa, {as: 'siswa'});
-    Sekolah.belongsToMany(models.Kelas, {through: 'KelasSekolah'});
+    Sekolah.hasMany(models.siswa);
+    Sekolah.belongsToMany(models.kelas, {through: 'kelas_sekolah'});
   };
 
   return Sekolah;

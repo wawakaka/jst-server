@@ -2,25 +2,38 @@
 
 module.exports = function(sequelize, DataTypes) {
 
-  var Kelas = sequelize.define('Kelas', {
-    idKelas: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    isPrivate: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-      allowNull: false,
-    },
-  });
+  var Kelas = sequelize.define(
+      'kelas',
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          primaryKey: true,
+          autoIncrement: true,
+        },
+        is_private: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false,
+          allowNull: false,
+        },
+        is_active: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false,
+          allowNull: false,
+        },
+      },
+      {
+        freezeTableName: true,
+        tableName: 'kelas',
+        underscored: true,
+      }
+  );
 
   Kelas.associate = function(models) {
-    Kelas.belongsTo(models.User);
-    Kelas.belongsTo(models.Bidang);
-    Kelas.hasMany(models.JadwalKelas, {as: 'jadwalKelas'});
-    Kelas.hasMany(models.Siswa, {as: 'siswa'});
-    Kelas.belongsToMany(models.Sekolah, {through: 'KelasSekolah'});
+    Kelas.belongsTo(models.user);
+    Kelas.belongsTo(models.bidang);
+    Kelas.hasMany(models.jadwal_kelas, {as: 'jadwal_kelas'});
+    Kelas.hasMany(models.siswa, {as: 'siswa'});
+    Kelas.belongsToMany(models.sekolah, {through: 'kelas_sekolah'});
   };
 
   return Kelas;

@@ -6,9 +6,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-var users = require('./routes/users');
-var bidangs = require('./routes/bidangs');
-var siswas = require('./routes/siswas');
+var users = require('./routes/user');
+var bidangs = require('./routes/bidang');
+var siswas = require('./routes/siswa');
 var kelas = require('./routes/kelas');
 
 var app = express();
