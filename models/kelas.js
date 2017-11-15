@@ -33,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
     Kelas.belongsTo(models.bidang);
     Kelas.hasMany(models.jadwal_kelas, {as: 'jadwal_kelas'});
     Kelas.hasMany(models.siswa, {as: 'siswa'});
-    Kelas.belongsToMany(models.sekolah, {through: 'kelas_sekolah'});
+    Kelas.belongsTo(models.sekolah);
   };
 
   return Kelas;

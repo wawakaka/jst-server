@@ -25,7 +25,7 @@ module.exports = function(sequelize, DataTypes) {
 
   Sekolah.associate = function(models) {
     Sekolah.hasMany(models.siswa);
-    Sekolah.belongsToMany(models.kelas, {through: 'kelas_sekolah'});
+    Sekolah.hasMany(models.kelas);
   };
 
   return Sekolah;

@@ -20,9 +20,6 @@ function getKelas() {
           model: models.siswa,
           as: 'siswa',
         },
-        {
-          model: models.sekolah,
-        },
       ],
     }).then(function(kelas) {
       if (kelas) {
@@ -62,9 +59,6 @@ function createNewKelas() {
             {
               model: models.siswa,
               as: 'siswa',
-            },
-            {
-              model: models.sekolah,
             },
           ],
         }
