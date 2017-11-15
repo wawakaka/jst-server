@@ -9,12 +9,12 @@ function getKelas() {
   return function(req, res) {
     models.kelas.findAll({
       where: {
-        UserEmail: req.params.email,
+        user_email: req.params.email,
       },
       include: [
         {
           model: models.jadwal_kelas,
-          as: 'jadwalKelas',
+          as: 'jadwal_kelas',
         },
         {
           model: models.siswa,
@@ -24,12 +24,12 @@ function getKelas() {
           model: models.sekolah,
         },
       ],
-    }).then(function(users) {
-      if (users) {
+    }).then(function(kelas) {
+      if (kelas) {
         res.status(200).json({
           status: 'success',
           message: 'retrieve kelas',
-          data: users,
+          data: kelas,
         });
       }
       else if (res.status(404)) {
@@ -52,25 +52,12 @@ function getKelas() {
 function createNewKelas() {
   return function(req, res) {
     models.kelas.create(
-        // {
-        //   idKelas: null,
-        //   isPrivate: req.body.isPrivate,
-        //   BidangNamaBidang: req.body.BidangNamaBidang,
-        //   UserEmail: req.body.UserEmail,
-        //   jadwalKelas: {
-        //     idJadwalKelas: null,
-        //     tanggal: req.body.tanggal,
-        //     KelaIdKelas: null,
-        //   },
-        //   siswa: req.body.siswa,
-        //   Sekolahs: req.body.Sekolahs,
-        // },
         req.body.kelas,
         {
           include: [
             {
               model: models.jadwal_kelas,
-              as: 'jadwalKelas',
+              as: 'jadwal_kelas',
             },
             {
               model: models.siswa,
@@ -81,14 +68,13 @@ function createNewKelas() {
             },
           ],
         }
-    ).
-        then(function(kelas) {
-          res.status(200).json({
-            status: 'success',
-            message: 'new kelas added',
-            data: kelas,
-          });
-        }).catch(function(err) {
+    ).then(function(kelas) {
+      res.status(200).json({
+        status: 'success',
+        message: 'new kelas added',
+        data: kelas,
+      });
+    }).catch(function(err) {
       res.send(err);
     });
   };
