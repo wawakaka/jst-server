@@ -7,7 +7,7 @@ router.post('/create', createBidang());
 
 function getBidang() {
   return function(req, res) {
-    models.Bidang.all().then(function(bidangs) {
+    models.bidang.findAll().then(function(bidangs) {
       res.status(200).json({
         status: 'success',
         message: 'retrieve bidang',

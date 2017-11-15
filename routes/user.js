@@ -21,7 +21,7 @@ function login() {
         });
       }
       else if (res.status(404)) {
-        models.User.create({
+        models.user.create({
           nama: req.body.nama,
           email: req.body.email,
         }).then(function(users) {

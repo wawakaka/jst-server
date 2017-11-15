@@ -12,7 +12,7 @@ function getAllSiswa() {
     models.Siswa.all({
       include: [
         {
-          model: models.HasilTesHarian,
+          model: models.hasiltestharian,
           as: 'hasilTesHarian',
         }],
     }).then(function(siswas) {
@@ -30,7 +30,7 @@ function getAllSiswa() {
 function createSiswa() {
   return function(req, res) {
     models.Siswa.create({
-      nama: req.body.namaSiswa,
+      nama: req.body.nama_siswa,
       kelas: req.body.kelas,
     }).then(function() {
       res.status(200).json({
@@ -45,10 +45,10 @@ function createSiswa() {
 
 function editSiswa() {
   return function(req, res) {
-    models.Siswa.findById(req.params.idSiswa).then(function(siswas) {
+    models.Siswa.findById(req.params.id).then(function(siswas) {
       if (siswas) {
         siswas.update({
-          nama: req.body.namaSiswa,
+          nama: req.body.nama_siswa,
           kelas: req.body.kelas,
         });
         res.status(200).json({
@@ -70,8 +70,7 @@ function editSiswa() {
 
 function updateSiswaStatus() {
   return function(req, res) {
-
-    models.Siswa.findById(req.params.idSiswa).then(function(siswas) {
+    models.Siswa.findById(req.params.id).then(function(siswas) {
       if (siswas) {
         siswas.update({
           active: false,
