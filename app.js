@@ -12,6 +12,7 @@ var siswa = require('./routes/siswa');
 var kelas = require('./routes/kelas');
 var tesHarian = require('./routes/tesharian');
 var hasilTesHarian = require('./routes/hasiltesharian');
+var presensi = require('./routes/presensi');
 
 var app = express();
 
@@ -34,6 +35,7 @@ app.use('/siswa', siswa);
 app.use('/kelas', kelas);
 app.use('/tesharian', tesHarian);
 app.use('/hasiltesharian', hasilTesHarian);
+app.use('/presensi', presensi);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
