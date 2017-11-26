@@ -9,7 +9,7 @@ router.put('/:idSiswa/update', updateStatusSiswa());
 
 function getAllSiswa() {
   return function(req, res) {
-    models.Siswa.findAll({
+    models.siswa.findAll({
       include: [
         {
           model: models.hasiltestharian,
@@ -29,7 +29,7 @@ function getAllSiswa() {
 
 function createSiswa() {
   return function(req, res) {
-    models.Siswa.create({
+    models.siswa.create({
       nama: req.body.nama_siswa,
       kelas: req.body.kelas,
     }).then(function() {
@@ -45,7 +45,7 @@ function createSiswa() {
 
 function editSiswa() {
   return function(req, res) {
-    models.Siswa.findById(req.params.id).then(function(siswas) {
+    models.siswa.findById(req.params.id).then(function(siswas) {
       if (siswas) {
         siswas.update({
           nama: req.body.nama_siswa,
@@ -70,7 +70,7 @@ function editSiswa() {
 
 function updateStatusSiswa() {
   return function(req, res) {
-    models.Siswa.findById(req.params.id).then(function(siswas) {
+    models.siswa.findById(req.params.id).then(function(siswas) {
       if (siswas) {
         siswas.update({
           active: false,
