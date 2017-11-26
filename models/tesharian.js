@@ -10,6 +10,7 @@ module.exports = function(sequelize, DataTypes) {
           primaryKey: true,
           autoIncrement: true,
         },
+        file: DataTypes.STRING,
         keterangan: DataTypes.TEXT,
       },
       {

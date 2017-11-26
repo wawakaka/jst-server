@@ -5,11 +5,11 @@ var models = require('../models');
 router.get('/all', getAllSiswa());
 router.post('/create', createSiswa());
 router.put('/:idSiswa/edit', editSiswa());
-router.put('/:idSiswa/update', updateSiswaStatus());
+router.put('/:idSiswa/update', updateStatusSiswa());
 
 function getAllSiswa() {
   return function(req, res) {
-    models.Siswa.all({
+    models.Siswa.findAll({
       include: [
         {
           model: models.hasiltestharian,
@@ -68,7 +68,7 @@ function editSiswa() {
   };
 }
 
-function updateSiswaStatus() {
+function updateStatusSiswa() {
   return function(req, res) {
     models.Siswa.findById(req.params.id).then(function(siswas) {
       if (siswas) {
