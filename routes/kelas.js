@@ -18,7 +18,7 @@ function getKelas() {
         },
         {
           model: models.siswa,
-          as: 'siswa',
+          as: 'presensi',
         },
       ],
     }).then(function(kelas) {
