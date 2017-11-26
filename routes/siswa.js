@@ -13,7 +13,7 @@ function getAllSiswa() {
       include: [
         {
           model: models.hasiltestharian,
-          as: 'hasilTesHarian',
+          as: 'hasil_tes_harian',
         }],
     }).then(function(siswas) {
       res.status(200).json({
@@ -30,7 +30,7 @@ function getAllSiswa() {
 function createSiswa() {
   return function(req, res) {
     models.siswa.create({
-      nama: req.body.nama_siswa,
+      nama: req.body.nama,
       kelas: req.body.kelas,
     }).then(function() {
       res.status(200).json({
@@ -48,7 +48,7 @@ function editSiswa() {
     models.siswa.findById(req.params.id).then(function(siswas) {
       if (siswas) {
         siswas.update({
-          nama: req.body.nama_siswa,
+          nama: req.body.nama,
           kelas: req.body.kelas,
         });
         res.status(200).json({
