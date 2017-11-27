@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var models = require('../models');
+var db = require('../rawqueries/queries');
 
 router.get('/:id', getPresensi());
-router.post('/add', createNewKelas());
+router.post('/add', db.addNewPresensi());
 
 function getPresensi() {
   return function(req, res) {
@@ -29,23 +30,6 @@ function getPresensi() {
           message: 'error',
         });
       }
-    }).catch(function(err) {
-      res.send(err);
-    });
-  };
-}
-
-function createNewKelas() {
-  return function(req, res) {
-    models.sequelize.query(
-        'INSERT INTO "presensi" ( "jadwal_kela_id", "siswa_id") VALUES ( ' +
-        req.body.jadwal_kela_id + ',\'' + req.body.siswa_id + '\' )',
-        {type: models.sequelize.QueryTypes.INSERT}).then(function(results) {
-      res.status(200).json({
-        status: 'success',
-        message: 'presensi added',
-        data: results,
-      });
     }).catch(function(err) {
       res.send(err);
     });
