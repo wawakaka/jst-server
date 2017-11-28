@@ -41,6 +41,10 @@ function getKelas() {
         });
       }
     }).catch(function(err) {
+      res.json({
+        status: 'failed',
+        message: 'error' + err,
+      });
       res.send(err);
     });
   };
@@ -69,6 +73,10 @@ function createNewKelas() {
         data: kelas,
       });
     }).catch(function(err) {
+      res.json({
+        status: 'failed',
+        message: 'error' + err,
+      });
       res.send(err);
     });
   };

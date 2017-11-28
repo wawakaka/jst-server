@@ -7,13 +7,17 @@ router.post('/create', createBidang());
 
 function getBidang() {
   return function(req, res) {
-    models.bidang.findAll().then(function(bidangs) {
+    models.bidang.findAll().then(function(results) {
       res.status(200).json({
         status: 'success',
         message: 'retrieve bidang',
-        data: bidangs,
+        data: results,
       });
     }).catch(function(err) {
+      res.json({
+        status: 'failed',
+        message: 'error ' + err,
+      });
       res.send(err);
     });
   };
@@ -21,14 +25,19 @@ function getBidang() {
 
 function createBidang() {
   return function(req, res) {
-    models.Bidang.create({
-      nama: req.body.nama,
-    }).then(function() {
+    models.bidang.create(
+        req.body.bidang
+    ).then(function() {
       res.status(200).json({
         status: 'success',
         message: 'new bidang added',
+        data: true,
       });
     }).catch(function(err) {
+      res.json({
+        status: 'failed',
+        message: 'error ' + err,
+      });
       res.send(err);
     });
   };
