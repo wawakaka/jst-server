@@ -62,7 +62,7 @@ function createNewKelas() {
             },
             {
               model: models.siswa,
-              as: 'siswa',
+              as: 'list_siswa',
             },
           ],
         }
@@ -81,5 +81,7 @@ function createNewKelas() {
     });
   };
 }
+
+//todo changes all system error to common error message at release
 
 module.exports = router;

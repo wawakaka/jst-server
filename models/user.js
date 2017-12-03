@@ -35,7 +35,7 @@ module.exports = function(sequelize, DataTypes) {
   );
 
   User.associate = function(models) {
-    User.hasMany(models.kelas, {as: 'kelas'});
+    User.hasMany(models.kelas, {as: 'list_kelas'});
     User.hasMany(models.pengeluaran);
   };
 

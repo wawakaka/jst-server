@@ -41,6 +41,10 @@ function getAllSiswa() {
         });
       }
     }).catch(function(err) {
+      res.json({
+        status: 'failed',
+        message: 'error' + err,
+      });
       res.send(err);
     });
   };
