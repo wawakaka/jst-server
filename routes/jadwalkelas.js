@@ -2,31 +2,21 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models');
 
-router.get('/:email', getKelas());
-router.post('/create', createNewKelas());
+router.get('/:kelas', getJadwal());
+router.post('/add', createJadwal());
 
-function getKelas() {
+function getJadwal() {
   return function(req, res) {
-    models.kelas.findAll({
+    models.jadwal_kelas.findAll({
       where: {
-        user_email: req.params.email,
+        kela_id: req.params.kelas,
       },
-      include: [
-        {
-          model: models.jadwal_kelas,
-          as: 'jadwal_kelas',
-        },
-        {
-          model: models.siswa,
-          as: 'list_siswa',
-        },
-      ],
-    }).then(function(kelas) {
-      if (kelas) {
+    }).then(function(jadwal) {
+      if (jadwal) {
         res.status(200).json({
           status: 'success',
-          message: 'retrieve kelas',
-          data: kelas,
+          message: 'retrieve jadwal',
+          data: jadwal,
         });
       }
       else if (res.status(404)) {
@@ -50,27 +40,16 @@ function getKelas() {
   };
 }
 
-function createNewKelas() {
+//todo valid format datetime 2014-01-01T10:00:00+07:00
+function createJadwal() {
   return function(req, res) {
-    models.kelas.create(
-        req.body.kelas,
-        {
-          include: [
-            {
-              model: models.jadwal_kelas,
-              as: 'jadwal_kelas',
-            },
-            {
-              model: models.siswa,
-              as: 'list_siswa',
-            },
-          ],
-        }
-    ).then(function(kelas) {
+    models.jadwal_kelas.create(
+        req.body.jadwal_kelas
+    ).then(function(jadwal) {
       res.status(200).json({
         status: 'success',
-        message: 'new kelas added',
-        data: kelas,
+        message: 'new jadwal added',
+        data: jadwal,
       });
     }).catch(function(err) {
       res.json({

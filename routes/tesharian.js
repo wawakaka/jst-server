@@ -7,7 +7,7 @@ router.put('/:id', updateTesHarian());
 
 function getTesHarian() {
   return function(req, res) {
-    models.tes_harian.findAll({
+    models.tes_harian.find({
       where: {
         jadwal_kela_id: req.params.id,
       },
