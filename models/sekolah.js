@@ -5,14 +5,9 @@ module.exports = function(sequelize, DataTypes) {
   var Sekolah = sequelize.define(
       'sekolah',
       {
-        id: {
-          type: DataTypes.STRING,
-          primaryKey: true,
-          defaultValue: DataTypes.UUIDV4,
-          allowNull: false,
-        },
         nama: {
           type: DataTypes.STRING,
+          primaryKey: true,
           allowNull: false,
         },
       },
