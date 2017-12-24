@@ -7,7 +7,7 @@ router.put('/:id', updateTesHarian());
 
 function getTesHarian() {
   return function(req, res) {
-    models.tes_harian.find({
+    models.tes_harian.findOrCreate({
       where: {
         jadwal_kela_id: req.params.id,
       },
@@ -29,6 +29,7 @@ function getTesHarian() {
         res.json({
           status: 'failed',
           message: 'error',
+          data: results,
         });
       }
     }).catch(function(err) {
