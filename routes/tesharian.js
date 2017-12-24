@@ -7,7 +7,7 @@ router.put('/:id', updateTesHarian());
 
 function getTesHarian() {
   return function(req, res) {
-    models.tes_harian.findOrCreate({
+    models.tes_harian.find({
       where: {
         jadwal_kela_id: req.params.id,
       },
@@ -23,6 +23,23 @@ function getTesHarian() {
           status: 'success',
           message: 'retrieve tes_harian',
           data: results,
+        });
+      }
+      else if (res.status(404)) {
+        models.tes_harian.create({
+          jadwal_kela_id: req.params.id,
+        }).then(function(results) {
+          res.status(200).json({
+            status: 'success',
+            message: 'new tes harian added',
+            data: results,
+          });
+        }).catch(function(err) {
+          res.json({
+            status: 'failed',
+            message: 'error' + err,
+          });
+          res.send(err);
         });
       }
       else {
