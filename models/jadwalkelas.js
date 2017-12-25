@@ -20,6 +20,7 @@ module.exports = function(sequelize, DataTypes) {
   );
 
   JadwalKelas.associate = function(models) {
+    JadwalKelas.hasMany(models.kegiatan);
     JadwalKelas.hasOne(models.tes_harian);
     JadwalKelas.belongsTo(models.kelas);
     JadwalKelas.belongsToMany(models.siswa, {through: 'presensi'});
