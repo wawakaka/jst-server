@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models');
 
-router.get('/:id', getTesHarian());
+router.post('/:id', getTesHarian());
 router.put('/:id', updateTesHarian());
 
 function getTesHarian() {
@@ -26,9 +26,17 @@ function getTesHarian() {
         });
       }
       else if (res.status(404)) {
-        models.tes_harian.create({
-          jadwal_kela_id: req.params.id,
-        }).then(function(results) {
+        models.tes_harian.create(
+            req.body.tes_harian,
+            {
+              include: [
+                {
+                  model: models.hasil_tes_harian,
+                  as: 'hasil_tes_harian',
+                },
+              ],
+            }
+        ).then(function(results) {
           res.status(200).json({
             status: 'success',
             message: 'new tes harian added',
