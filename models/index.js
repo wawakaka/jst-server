@@ -16,10 +16,10 @@ var db = {};
 // }
 
 var sequelize = new Sequelize(
-    'd4b3b7r1a0rbjm',
-    'tkzlhwzjgrjtfi',
-    'a826b9b75487e7fc1a47030ae09fad6fd78cb6a78f2ecdfd830cf1eec4e30f9a', {
-      host: 'ec2-54-197-253-210.compute-1.amazonaws.com',
+    process.env.DB,
+    process.env.DB_USERNAME,
+    process.env.DB_PASSWORD, {
+      host: process.env.DB_HOST,
       dialect: 'postgres',
       ssl: true,
       dialectOptions: {

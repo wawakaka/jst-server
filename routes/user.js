@@ -1,12 +1,17 @@
 var express = require('express');
+var passport = require('passport');
 var router = express.Router();
 var models = require('../models');
 
 router.post('/login/:email', login());
-router.get('/:email', getUserByEmail());
 router.post('/create', createUser());
 router.put('/:email', editUser());
 router.put('/:email/activate', activateUser());
+router.get(
+    '/:email',
+    passport.authenticate('bearer', {session: false}),
+    getUserByEmail()
+);
 
 function login() {
   return function(req, res) {
@@ -46,34 +51,35 @@ function login() {
   };
 }
 
-function getUserByEmail() {
-  return function(req, res) {
-    models.user.findById(
-        req.params.email
-    ).then(function(users) {
-      if (users) {
-        res.status(200).json({
-          status: 'success',
-          message: 'retrieve user',
-          data: users,
-        });
-      }
-      else if (res.status(404)) {
-        res.status(404).json({
-          message: 'not found',
-        });
-      }
-      else {
-        res.json({
-          status: 'failed',
-          message: 'error',
-        });
-      }
-    }).catch(function(err) {
-      res.send(err);
-    });
-  };
-}
+//
+// function getUserByEmail() {
+//   return function(req, res) {
+//     models.user.findById(
+//         req.params.email
+//     ).then(function(users) {
+//       if (users) {
+//         res.status(200).json({
+//           status: 'success',
+//           message: 'retrieve user',
+//           data: users,
+//         });
+//       }
+//       else if (res.status(404)) {
+//         res.status(404).json({
+//           message: 'not found',
+//         });
+//       }
+//       else {
+//         res.json({
+//           status: 'failed',
+//           message: 'error',
+//         });
+//       }
+//     }).catch(function(err) {
+//       res.send(err);
+//     });
+//   };
+// }
 
 function createUser() {
   return function(req, res) {
@@ -139,6 +145,29 @@ function activateUser() {
     }).catch(function(err) {
       res.send(err);
     });
+  };
+}
+
+//todo this is example of using bearer token
+function getUserByEmail() {
+  return function(req, res) {
+    if (req.user.length >= 1) {
+      res.status(200).json({
+        status: 'success',
+        message: 'user exist',
+        data: req.user,
+      });
+    } else if (req.user.length < 1) {
+      res.status(404).json({
+        status: 'failed',
+        message: 'user not found',
+      });
+    } else {
+      res.json({
+        status: 'failed',
+        message: 'error',
+      });
+    }
   };
 }
 
