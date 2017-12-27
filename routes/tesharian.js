@@ -19,11 +19,18 @@ function getUpdatedTesHarian() {
         },
       ],
     }).then(function(results) {
-      res.status(200).json({
-        status: 'success',
-        message: 'retrieve tes_harian',
-        data: results,
-      });
+      if (results) {
+        res.status(200).json({
+          status: 'success',
+          message: 'retrieve tes_harian',
+          data: results,
+        });
+      } else {
+        res.json({
+          status: 'failed',
+          message: 'error',
+        });
+      }
     }).catch(function(err) {
       res.json({
         status: 'failed',
