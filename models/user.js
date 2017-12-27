@@ -34,6 +34,20 @@ module.exports = function(sequelize, DataTypes) {
       }
   );
 
+  User.findByToken = function(token, cb) {
+    process.nextTick(function() {
+      User.findAll({
+        where: {
+          token: token,
+        },
+      }).then(function(s) {
+        return cb(null, s);
+      }).catch(function(err) {
+        console.log(err);
+      });
+    });
+  };
+
   User.associate = function(models) {
     User.hasMany(models.kelas, {as: 'list_kelas'});
     User.hasMany(models.pengeluaran);
