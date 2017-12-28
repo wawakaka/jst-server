@@ -7,6 +7,7 @@ router.post('/login/:email', login());
 router.post('/create', createUser());
 router.put('/:email', editUser());
 router.put('/:email/activate', activateUser());
+//this is just example
 router.get(
     '/:email',
     passport.authenticate('bearer', {session: false}),
@@ -50,36 +51,6 @@ function login() {
     });
   };
 }
-
-//
-// function getUserByEmail() {
-//   return function(req, res) {
-//     models.user.findById(
-//         req.params.email
-//     ).then(function(users) {
-//       if (users) {
-//         res.status(200).json({
-//           status: 'success',
-//           message: 'retrieve user',
-//           data: users,
-//         });
-//       }
-//       else if (res.status(404)) {
-//         res.status(404).json({
-//           message: 'not found',
-//         });
-//       }
-//       else {
-//         res.json({
-//           status: 'failed',
-//           message: 'error',
-//         });
-//       }
-//     }).catch(function(err) {
-//       res.send(err);
-//     });
-//   };
-// }
 
 function createUser() {
   return function(req, res) {
@@ -158,9 +129,9 @@ function getUserByEmail() {
         data: req.user,
       });
     } else if (req.user.length < 1) {
-      res.status(404).json({
+      res.status(401).json({
         status: 'failed',
-        message: 'user not found',
+        message: 'authorization error',
       });
     } else {
       res.json({

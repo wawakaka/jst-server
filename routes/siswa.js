@@ -1,172 +1,253 @@
 var express = require('express');
+var passport = require('passport');
 var router = express.Router();
 var models = require('../models');
 
-router.get('/all', getAllSiswa());
-router.get('/:idSiswa', getSiswaById());
-router.post('/create', createSiswa());
-router.put('/:idSiswa/edit', editSiswa());
-router.put('/:idSiswa/update', updateStatusSiswa());
+router.get(
+    '/all',
+    passport.authenticate('bearer', {session: false}),
+    getAllSiswa()
+);
+router.get(
+    '/:idSiswa',
+    passport.authenticate('bearer', {session: false}),
+    getSiswaById()
+);
+router.post(
+    '/create',
+    passport.authenticate('bearer', {session: false}),
+    createSiswa()
+);
+router.put(
+    '/:idSiswa/edit',
+    passport.authenticate('bearer', {session: false}),
+    editSiswa()
+);
+router.put(
+    '/:idSiswa/update',
+    passport.authenticate('bearer', {session: false}),
+    updateStatusSiswa()
+);
 
 function getAllSiswa() {
   return function(req, res) {
-    models.siswa.findAll({
-      include: [
-        {
-          model: models.hasil_tes_harian,
-          as: 'hasil_tes_harian',
-        },
-        {
-          model: models.laporan_akhir,
-          as: 'laporan_akhir',
-        },
-      ],
-    }).then(function(siswas) {
-      if (siswas) {
-        res.status(200).json({
-          status: 'success',
-          message: 'retrieve kelas',
-          data: siswas,
-        });
-      }
-      else if (res.status(404)) {
-        res.status(404).json({
-          message: 'not found',
-        });
-      }
-      else {
+    if (req.user.length >= 1) {
+      models.siswa.findAll({
+        include: [
+          {
+            model: models.hasil_tes_harian,
+            as: 'hasil_tes_harian',
+          },
+          {
+            model: models.laporan_akhir,
+            as: 'laporan_akhir',
+          },
+        ],
+      }).then(function(siswas) {
+        if (siswas) {
+          res.status(200).json({
+            status: 'success',
+            message: 'retrieve kelas',
+            data: siswas,
+          });
+        }
+        else if (res.status(404)) {
+          res.status(404).json({
+            message: 'not found',
+          });
+        }
+        else {
+          res.json({
+            status: 'failed',
+            message: 'error',
+          });
+        }
+      }).catch(function(err) {
         res.json({
           status: 'failed',
-          message: 'error',
+          message: 'error' + err,
         });
-      }
-    }).catch(function(err) {
+        res.send(err);
+      });
+    } else if (req.user.length < 1) {
+      res.status(401).json({
+        status: 'failed',
+        message: 'authorization error',
+      });
+    } else {
       res.json({
         status: 'failed',
-        message: 'error' + err,
+        message: 'error',
       });
-      res.send(err);
-    });
+    }
   };
 }
 
 function getSiswaById() {
   return function(req, res) {
-    models.siswa.findOne({
-      where: {
-        id: req.params.idSiswa,
-      },
-      include: [
-        {
-          model: models.hasil_tes_harian,
-          as: 'hasil_tes_harian',
+    if (req.user.length >= 1) {
+      models.siswa.findOne({
+        where: {
+          id: req.params.idSiswa,
         },
-        {
-          model: models.laporan_akhir,
-          as: 'laporan_akhir',
-        },
-      ],
-    }).then(function(siswas) {
-      if (siswas) {
-        res.status(200).json({
-          status: 'success',
-          message: 'retrieve kelas',
-          data: siswas,
-        });
-      }
-      else if (res.status(404)) {
-        res.status(404).json({
-          message: 'not found',
-        });
-      }
-      else {
-        res.json({
-          status: 'failed',
-          message: 'error',
-        });
-      }
-    }).catch(function(err) {
-      res.send(err);
-    });
+        include: [
+          {
+            model: models.hasil_tes_harian,
+            as: 'hasil_tes_harian',
+          },
+          {
+            model: models.laporan_akhir,
+            as: 'laporan_akhir',
+          },
+        ],
+      }).then(function(siswas) {
+        if (siswas) {
+          res.status(200).json({
+            status: 'success',
+            message: 'retrieve kelas',
+            data: siswas,
+          });
+        }
+        else if (res.status(404)) {
+          res.status(404).json({
+            message: 'not found',
+          });
+        }
+        else {
+          res.json({
+            status: 'failed',
+            message: 'error',
+          });
+        }
+      }).catch(function(err) {
+        res.send(err);
+      });
+    } else if (req.user.length < 1) {
+      res.status(401).json({
+        status: 'failed',
+        message: 'authorization error',
+      });
+    } else {
+      res.json({
+        status: 'failed',
+        message: 'error',
+      });
+    }
   };
 }
 
 function createSiswa() {
   return function(req, res) {
-    models.siswa.create(
-        req.body.siswa,
-        {
-          include: [
-            {
-              model: models.sekolah,
-            },
-          ],
-        }
-    ).then(function(siswas) {
-      res.status(200).json({
-        status: 'success',
-        message: 'new siswa added',
-        data: siswas,
+    if (req.user.length >= 1) {
+      models.siswa.create(
+          req.body.siswa,
+          {
+            include: [
+              {
+                model: models.sekolah,
+              },
+            ],
+          }
+      ).then(function(siswas) {
+        res.status(200).json({
+          status: 'success',
+          message: 'new siswa added',
+          data: siswas,
+        });
+      }).catch(function(err) {
+        res.send(err);
       });
-    }).catch(function(err) {
-      res.send(err);
-    });
+    } else if (req.user.length < 1) {
+      res.status(401).json({
+        status: 'failed',
+        message: 'authorization error',
+      });
+    } else {
+      res.json({
+        status: 'failed',
+        message: 'error',
+      });
+    }
   };
 }
 
 function editSiswa() {
   return function(req, res) {
-    models.siswa.findById(req.params.id).then(function(siswas) {
-      if (siswas) {
-        siswas.update(
-            req.body.siswa,
-            {
-              include: [
-                {
-                  model: models.hasil_tes_harian,
-                  as: 'hasil_tes_harian',
-                },
-                {
-                  model: models.laporan_akhir,
-                  as: 'laporan_akhir',
-                },
-              ],
-            }
-        );
-      }
-      else {
-        res.status(404).json({
-          status: 'failed',
-          message: 'not found',
-        });
-      }
-    }).catch(function(err) {
-      res.send(err);
-    });
+    if (req.user.length >= 1) {
+      models.siswa.findById(req.params.id).then(function(siswas) {
+        if (siswas) {
+          siswas.update(
+              req.body.siswa,
+              {
+                include: [
+                  {
+                    model: models.hasil_tes_harian,
+                    as: 'hasil_tes_harian',
+                  },
+                  {
+                    model: models.laporan_akhir,
+                    as: 'laporan_akhir',
+                  },
+                ],
+              }
+          );
+        }
+        else {
+          res.status(404).json({
+            status: 'failed',
+            message: 'not found',
+          });
+        }
+      }).catch(function(err) {
+        res.send(err);
+      });
+    } else if (req.user.length < 1) {
+      res.status(401).json({
+        status: 'failed',
+        message: 'authorization error',
+      });
+    } else {
+      res.json({
+        status: 'failed',
+        message: 'error',
+      });
+    }
   };
 }
 
 function updateStatusSiswa() {
   return function(req, res) {
-    models.siswa.findById(req.params.id).then(function(siswas) {
-      if (siswas) {
-        siswas.update({
-          active: false,
-        });
-        res.status(200).json({
-          status: 'success',
-          message: 'Siswa updated',
-        });
-      }
-      else {
-        res.status(404).json({
-          status: 'failed',
-          message: 'not found',
-        });
-      }
-    }).catch(function(err) {
-      res.send(err);
-    });
+    if (req.user.length >= 1) {
+      models.siswa.findById(req.params.id).then(function(siswas) {
+        if (siswas) {
+          siswas.update({
+            active: false,
+          });
+          res.status(200).json({
+            status: 'success',
+            message: 'Siswa updated',
+          });
+        }
+        else {
+          res.status(404).json({
+            status: 'failed',
+            message: 'not found',
+          });
+        }
+      }).catch(function(err) {
+        res.send(err);
+      });
+    } else if (req.user.length < 1) {
+      res.status(401).json({
+        status: 'failed',
+        message: 'authorization error',
+      });
+    } else {
+      res.json({
+        status: 'failed',
+        message: 'error',
+      });
+    }
   };
 };
 

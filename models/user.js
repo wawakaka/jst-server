@@ -15,6 +15,8 @@ module.exports = function(sequelize, DataTypes) {
         },
         token: {
           type: DataTypes.STRING,
+          defaultValue: DataTypes.UUIDV4,
+          allowNull: false,
         },
         is_super_user: {
           type: DataTypes.BOOLEAN,
