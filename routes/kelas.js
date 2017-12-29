@@ -18,10 +18,15 @@ router.post(
     passport.authenticate('bearer', {session: false}),
     createNewKelas()
 );
+router.put(
+    '/:id/update',
+    passport.authenticate('bearer', {session: false}),
+    updateKelas()
+);
 
 function getAllKelas() {
   return function(req, res) {
-    if (req.user.length >= 1) {
+    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.kelas.findAll({
         include: [
           {
@@ -132,7 +137,7 @@ function getKelas() {
 
 function createNewKelas() {
   return function(req, res) {
-    if (req.user.length >= 1) {
+    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.kelas.create(
           req.body.kelas,
           {
@@ -163,7 +168,49 @@ function createNewKelas() {
     } else if (req.user.length < 1) {
       res.status(401).json({
         status: 'failed',
-        message: 'user not found',
+        message: 'authorization error',
+      });
+    } else {
+      res.json({
+        status: 'failed',
+        message: 'error',
+      });
+    }
+  };
+}
+
+function updateKelas() {
+  return function(req, res) {
+    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
+      models.kelas.findById(req.params.id).then(function(kelas) {
+        if (kelas) {
+          kelas.update({
+            is_active: !kelas.is_active,
+          }).then(function(kelas) {
+            res.status(200).json({
+              status: 'success',
+              message: 'kelas updated',
+              data: true,
+            });
+          }).catch(function(err) {
+            res.json({
+              status: 'failed',
+              message: 'error' + err,
+            });
+            res.send(err);
+          });
+        }
+      }).catch(function(err) {
+        res.json({
+          status: 'failed',
+          message: 'error' + err,
+        });
+        res.send(err);
+      });
+    } else if (req.user.length < 1) {
+      res.status(401).json({
+        status: 'failed',
+        message: 'authorization error',
       });
     } else {
       res.json({

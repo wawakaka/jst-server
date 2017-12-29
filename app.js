@@ -26,7 +26,6 @@ var jadwalKelas = require('./routes/jadwalkelas');
 // after authentication.
 passport.use(new Strategy(
     function(token, cb) {
-      console.log(token);
       models.user.findByToken(token, function(err, user) {
         if (err) { return cb(err); }
         if (!user) { return cb(null, false); }

@@ -24,14 +24,14 @@ router.put(
     editSiswa()
 );
 router.put(
-    '/:idSiswa/update',
+    '/:id/update',
     passport.authenticate('bearer', {session: false}),
     updateStatusSiswa()
 );
 
 function getAllSiswa() {
   return function(req, res) {
-    if (req.user.length >= 1) {
+    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.siswa.findAll({
         include: [
           {
@@ -85,7 +85,7 @@ function getAllSiswa() {
 
 function getSiswaById() {
   return function(req, res) {
-    if (req.user.length >= 1) {
+    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.siswa.findOne({
         where: {
           id: req.params.idSiswa,
@@ -138,7 +138,7 @@ function getSiswaById() {
 
 function createSiswa() {
   return function(req, res) {
-    if (req.user.length >= 1) {
+    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.siswa.create(
           req.body.siswa,
           {
@@ -173,7 +173,7 @@ function createSiswa() {
 
 function editSiswa() {
   return function(req, res) {
-    if (req.user.length >= 1) {
+    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.siswa.findById(req.params.id).then(function(siswas) {
         if (siswas) {
           siswas.update(
@@ -217,15 +217,16 @@ function editSiswa() {
 
 function updateStatusSiswa() {
   return function(req, res) {
-    if (req.user.length >= 1) {
+    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.siswa.findById(req.params.id).then(function(siswas) {
         if (siswas) {
           siswas.update({
-            active: false,
+            is_active: !siswas.is_active,
           });
           res.status(200).json({
             status: 'success',
             message: 'Siswa updated',
+            data: true,
           });
         }
         else {
