@@ -186,7 +186,7 @@ function updateKelas() {
         if (kelas) {
           kelas.update({
             is_active: !kelas.is_active,
-          }).then(function(kelas) {
+          }).then(function() {
             res.status(200).json({
               status: 'success',
               message: 'kelas updated',

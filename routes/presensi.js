@@ -9,7 +9,7 @@ router.get(
     getPresensi()
 );
 router.post(
-    '/update/:id',
+    '/:id/update',
     passport.authenticate('bearer', {session: false}),
     updatePresensi()
 );

@@ -99,7 +99,7 @@ function activateUser() {
     models.user.findById(req.params.email).then(function(users) {
       if (users) {
         users.update({
-          is_active: req.body.is_active,
+          is_active: !users.is_active,
         });
         res.status(200).json({
           status: 'success',

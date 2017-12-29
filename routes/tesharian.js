@@ -12,7 +12,7 @@ router.post('/:id',
     passport.authenticate('bearer', {session: false}),
     getTesHarian()
 );
-router.put('/:id',
+router.put('/:id/update',
     passport.authenticate('bearer', {session: false}),
     updateTesHarian()
 );

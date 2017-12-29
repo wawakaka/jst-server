@@ -14,7 +14,7 @@ router.post(
     createBidang()
 );
 router.delete(
-    '/delete/:nama',
+    '/:nama/delete',
     passport.authenticate('bearer', {session: false}),
     deleteBidang()
 );

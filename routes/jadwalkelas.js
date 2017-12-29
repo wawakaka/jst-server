@@ -11,7 +11,7 @@ router.post('/add',
     passport.authenticate('bearer', {session: false}),
     createJadwal()
 );
-router.post('/delete/:tanggal',
+router.delete('/:tanggal/delete',
     passport.authenticate('bearer', {session: false}),
     deleteJadwal()
 );
@@ -103,7 +103,7 @@ function deleteJadwal() {
         where: {
           tanggal: req.params.tanggal,
         },
-      }).then(function(jadwal) {
+      }).then(function() {
         res.status(200).json({
           status: 'success',
           message: 'jadwal deleted',

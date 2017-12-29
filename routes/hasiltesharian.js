@@ -7,7 +7,7 @@ router.get('/:id',
     passport.authenticate('bearer', {session: false}),
     getHasilTesHarian()
 );
-router.post('/update/:id',
+router.post('/:id/update',
     passport.authenticate('bearer', {session: false}),
     updateHasilTesHarian()
 );
@@ -70,7 +70,7 @@ function updateHasilTesHarian() {
         if (result1 || res.status(404)) {
           models.hasil_tes_harian.bulkCreate(
               req.body.hasil_tes_harian
-          ).then(function(result) {
+          ).then(function() {
             if (res.status(200)) {
               res.status(200).json({
                 status: 'success',
