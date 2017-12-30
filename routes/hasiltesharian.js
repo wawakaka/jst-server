@@ -7,7 +7,7 @@ router.get('/:id',
     passport.authenticate('bearer', {session: false}),
     getHasilTesHarian()
 );
-router.post('/:id/update',
+router.put('/:id/update',
     passport.authenticate('bearer', {session: false}),
     updateHasilTesHarian()
 );
