@@ -5,16 +5,56 @@ var models = require('../models');
 
 router.get('/:kelas',
     passport.authenticate('bearer', {session: false}),
+    getAllJadwal()
+);
+router.get('/:kelas',
+    passport.authenticate('bearer', {session: false}),
     getJadwal()
 );
 router.post('/add',
     passport.authenticate('bearer', {session: false}),
     createJadwal()
 );
-router.delete('/:tanggal/delete',
+router.put('/:id/update',
+    passport.authenticate('bearer', {session: false}),
+    updateJadwal()
+);
+router.delete('/:id/delete',
     passport.authenticate('bearer', {session: false}),
     deleteJadwal()
 );
+
+function getAllJadwal() {
+  return function(req, res) {
+    if (req.user.length >= 1) {
+      models.jadwal_kelas.findAll().then(function(jadwal) {
+        if (jadwal) {
+          res.status(200).json({
+            status: 'success',
+            message: 'retrieve jadwal',
+            data: jadwal,
+          });
+        }
+      }).catch(function(err) {
+        res.json({
+          status: 'failed',
+          message: 'error' + err,
+        });
+        res.send(err);
+      });
+    } else if (req.user.length < 1) {
+      res.status(401).json({
+        status: 'failed',
+        message: 'authorization error',
+      });
+    } else {
+      res.json({
+        status: 'failed',
+        message: 'error',
+      });
+    }
+  };
+}
 
 function getJadwal() {
   return function(req, res) {
@@ -96,12 +136,54 @@ function createJadwal() {
   };
 }
 
+function updateJadwal() {
+  return function(req, res) {
+    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
+      models.jadwal_kelas.findById(req.params.id).then(function(jadwal) {
+        if (jadwal) {
+          jadwal_kelas.update(
+              req.body.jadwal_kelas
+          ).then(function() {
+            res.status(200).json({
+              status: 'success',
+              message: 'jadwal_kelas updated',
+              data: true,
+            });
+          }).catch(function(err) {
+            res.json({
+              status: 'failed',
+              message: 'error' + err,
+            });
+            res.send(err);
+          });
+        }
+      }).catch(function(err) {
+        res.json({
+          status: 'failed',
+          message: 'error' + err,
+        });
+        res.send(err);
+      });
+    } else if (req.user.length < 1) {
+      res.status(401).json({
+        status: 'failed',
+        message: 'authorization error',
+      });
+    } else {
+      res.json({
+        status: 'failed',
+        message: 'error',
+      });
+    }
+  };
+}
+
 function deleteJadwal() {
   return function(req, res) {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.jadwal_kelas.destroy({
         where: {
-          tanggal: req.params.tanggal,
+          id: req.params.id,
         },
       }).then(function() {
         res.status(200).json({

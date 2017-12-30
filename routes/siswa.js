@@ -19,12 +19,12 @@ router.post(
     createSiswa()
 );
 router.put(
-    '/:idSiswa/edit',
+    '/:idSiswa/update',
     passport.authenticate('bearer', {session: false}),
     editSiswa()
 );
 router.put(
-    '/:id/update',
+    '/:id/updatestatus',
     passport.authenticate('bearer', {session: false}),
     updateStatusSiswa()
 );
