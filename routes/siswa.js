@@ -174,23 +174,23 @@ function createSiswa() {
 function editSiswa() {
   return function(req, res) {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
-      models.siswa.findById(req.params.id).then(function(siswas) {
+      models.siswa.findById(req.params.idSiswa).then(function(siswas) {
         if (siswas) {
           siswas.update(
-              req.body.siswa,
-              {
-                include: [
-                  {
-                    model: models.hasil_tes_harian,
-                    as: 'hasil_tes_harian',
-                  },
-                  {
-                    model: models.laporan_akhir,
-                    as: 'laporan_akhir',
-                  },
-                ],
-              }
-          );
+              req.body.siswa
+          ).then(function() {
+            res.status(200).json({
+              status: 'success',
+              message: 'siswa updated',
+              data: true,
+            });
+          }).catch(function(err) {
+            res.status(404).json({
+              status: 'failed',
+              message: 'error' + err,
+            });
+            res.send(err);
+          });
         }
         else {
           res.status(404).json({
@@ -222,11 +222,18 @@ function updateStatusSiswa() {
         if (siswas) {
           siswas.update({
             is_active: !siswas.is_active,
-          });
-          res.status(200).json({
-            status: 'success',
-            message: 'Siswa updated',
-            data: true,
+          }).then(function() {
+            res.status(200).json({
+              status: 'success',
+              message: 'siswa updated',
+              data: true,
+            });
+          }).catch(function(err) {
+            res.status(404).json({
+              status: 'failed',
+              message: 'error' + err,
+            });
+            res.send(err);
           });
         }
         else {
