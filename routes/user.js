@@ -5,8 +5,21 @@ var models = require('../models');
 
 router.post('/login/:email', login());
 router.post('/create', createUser());
-router.put('/:email', editUser());
-router.put('/:email/activate', activateUser());
+router.put(
+    '/:email',
+    passport.authenticate('bearer', {session: false}),
+    updateUser()
+);
+router.put(
+    '/:email/activate',
+    passport.authenticate('bearer', {session: false}),
+    activateUser()
+);
+router.get(
+    '/all',
+    passport.authenticate('bearer', {session: false}),
+    getAllUser()
+);
 //this is just example
 router.get(
     '/:email',
@@ -69,53 +82,115 @@ function createUser() {
   };
 }
 
-function editUser() {
+function updateUser() {
   return function(req, res) {
-    models.user.findById(req.params.email).then(function(users) {
-      if (users) {
-        users.update({
-          nama: req.body.nama,
-        });
-        res.status(200).json({
-          status: 'success',
-          message: 'user updated',
-          data: users,
-        });
-      }
-      else {
-        res.status(404).json({
+    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
+      models.user.findById(req.params.email).then(function(users) {
+        if (users) {
+          users.update({
+            nama: req.body.nama,
+          }).then(function() {
+            res.status(200).json({
+              status: 'success',
+              message: 'user updated',
+            });
+          });
+        }
+        else {
+          res.status(404).json({
+            status: 'failed',
+            message: 'not found',
+          });
+        }
+      }).catch(function(err) {
+        res.json({
           status: 'failed',
-          message: 'not found',
+          message: 'error ' + err,
         });
-      }
-    }).catch(function(err) {
-      res.send(err);
-    });
+        res.send(err);
+      });
+    } else if (req.user.length < 1) {
+      res.status(401).json({
+        status: 'failed',
+        message: 'authorization error',
+      });
+    } else {
+      res.json({
+        status: 'failed',
+        message: 'error',
+      });
+    }
   };
 }
 
 function activateUser() {
   return function(req, res) {
-    models.user.findById(req.params.email).then(function(users) {
-      if (users) {
-        users.update({
-          is_active: !users.is_active,
+    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
+      models.user.findById(req.params.email).then(function(users) {
+        if (users) {
+          users.update({
+            is_active: !users.is_active,
+          }).then(function() {
+            res.status(200).json({
+              status: 'success',
+              message: 'user is activated now',
+            });
+          });
+        }
+        else {
+          res.status(404).json({
+            status: 'failed',
+            message: 'not found',
+          });
+        }
+      }).catch(function(err) {
+        res.json({
+          status: 'failed',
+          message: 'error ' + err,
         });
+        res.send(err);
+      });
+    } else if (req.user.length < 1) {
+      res.status(401).json({
+        status: 'failed',
+        message: 'authorization error',
+      });
+    } else {
+      res.json({
+        status: 'failed',
+        message: 'error',
+      });
+    }
+  };
+}
+
+function getAllUser() {
+  return function(req, res) {
+    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
+      models.user.findAll().then(function(results) {
         res.status(200).json({
           status: 'success',
-          message: 'user is activated now',
-          data: users,
+          message: 'retrieve user',
+          data: results,
         });
-      }
-      else {
-        res.status(404).json({
+      }).catch(function(err) {
+        res.json({
           status: 'failed',
-          message: 'not found',
+          message: 'error ' + err,
         });
-      }
-    }).catch(function(err) {
-      res.send(err);
-    });
+        res.send(err);
+      });
+    } else if (req.user.length < 1) {
+      res.status(401).json({
+        status: 'failed',
+        message: 'authorization error',
+      });
+    } else {
+      res.json({
+        status: 'failed',
+        message: 'error',
+      });
+    }
   };
 }
 

@@ -16,15 +16,11 @@ var db = {};
 // }
 
 var sequelize = new Sequelize(
-    process.env.DB,
-    process.env.DB_USERNAME,
-    process.env.DB_PASSWORD, {
-      host: process.env.DB_HOST,
+    'jstapi',
+    'postgres',
+    'ryzen5', {
+      host: '45.77.174.200',
       dialect: 'postgres',
-      ssl: true,
-      dialectOptions: {
-        'ssl': true,
-      },
       define: {
         'timestamps': false,
       },
