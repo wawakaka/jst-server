@@ -23,6 +23,11 @@ router.put(
     passport.authenticate('bearer', {session: false}),
     updateKelas()
 );
+router.put(
+    '/:id/updatestatus',
+    passport.authenticate('bearer', {session: false}),
+    updateStatusKelas()
+);
 
 function getAllKelas() {
   return function(req, res) {
@@ -184,12 +189,52 @@ function updateKelas() {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.kelas.findById(req.params.id).then(function(kelas) {
         if (kelas) {
+          kelas.update(req.body.kelas).then(function() {
+            res.status(200).json({
+              status: 'success',
+              message: 'kelas updated',
+              data: true,
+            });
+          }).catch(function(err) {
+            res.json({
+              status: 'failed',
+              message: 'error' + err,
+            });
+            res.send(err);
+          });
+        }
+      }).catch(function(err) {
+        res.json({
+          status: 'failed',
+          message: 'error' + err,
+        });
+        res.send(err);
+      });
+    } else if (req.user.length < 1) {
+      res.status(401).json({
+        status: 'failed',
+        message: 'authorization error',
+      });
+    } else {
+      res.json({
+        status: 'failed',
+        message: 'error',
+      });
+    }
+  };
+}
+
+function updateStatusKelas() {
+  return function(req, res) {
+    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
+      models.kelas.findById(req.params.id).then(function(kelas) {
+        if (kelas) {
           kelas.update({
             is_active: !kelas.is_active,
           }).then(function() {
             res.status(200).json({
               status: 'success',
-              message: 'kelas updated',
+              message: 'kelas status updated',
               data: true,
             });
           }).catch(function(err) {

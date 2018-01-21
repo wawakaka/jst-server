@@ -47,7 +47,7 @@ function getAllSiswa() {
         if (siswas) {
           res.status(200).json({
             status: 'success',
-            message: 'retrieve kelas',
+            message: 'retrieve siswa',
             data: siswas,
           });
         }
@@ -104,7 +104,7 @@ function getSiswaById() {
         if (siswas) {
           res.status(200).json({
             status: 'success',
-            message: 'retrieve kelas',
+            message: 'retrieve siswa',
             data: siswas,
           });
         }
