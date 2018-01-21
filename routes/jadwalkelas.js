@@ -114,11 +114,11 @@ function createJadwal() {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.jadwal_kelas.create(
           req.body.jadwal_kelas
-      ).then(function(jadwal) {
+      ).then(function() {
         res.status(200).json({
           status: 'success',
           message: 'new jadwal added',
-          data: jadwal,
+          data: true,
         });
       }).catch(function(err) {
         res.json({
