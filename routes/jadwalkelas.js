@@ -146,9 +146,7 @@ function updateJadwal() {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.jadwal_kelas.findById(req.params.id).then(function(jadwal) {
         if (jadwal) {
-          jadwal_kelas.update(
-              req.body.jadwal_kelas
-          ).then(function() {
+          jadwal.update(req.body.jadwal_kelas).then(function() {
             res.status(200).json({
               status: 'success',
               message: 'jadwal_kelas updated',
