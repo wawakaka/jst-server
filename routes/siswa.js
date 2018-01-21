@@ -148,11 +148,11 @@ function createSiswa() {
               },
             ],
           }
-      ).then(function(siswas) {
+      ).then(function() {
         res.status(200).json({
           status: 'success',
           message: 'new siswa added',
-          data: siswas,
+          data: true,
         });
       }).catch(function(err) {
         res.send(err);
