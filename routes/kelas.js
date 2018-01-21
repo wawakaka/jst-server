@@ -152,11 +152,11 @@ function createNewKelas() {
               },
             ],
           }
-      ).then(function(kelas) {
+      ).then(function() {
         res.status(200).json({
           status: 'success',
           message: 'new kelas added',
-          data: kelas,
+          data: true,
         });
       }).catch(function(err) {
         res.json({
