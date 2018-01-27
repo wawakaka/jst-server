@@ -18,6 +18,7 @@ var hasilTesHarian = require('./routes/hasiltesharian');
 var presensi = require('./routes/presensi');
 var jadwalKelas = require('./routes/jadwalkelas');
 var sekolah = require('./routes/sekolah');
+var kegiatan = require('./routes/kegiatan');
 
 // Configure the Bearer strategy for use by Passport.
 //
@@ -59,6 +60,7 @@ app.use('/hasiltesharian', hasilTesHarian);
 app.use('/presensi', presensi);
 app.use('/jadwalkelas', jadwalKelas);
 app.use('/sekolah', sekolah);
+app.use('/kegiatan', kegiatan);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
