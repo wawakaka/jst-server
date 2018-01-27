@@ -11,15 +11,11 @@ module.exports = function(sequelize, DataTypes) {
           autoIncrement: true,
         },
         sesi: {
-          type: DataTypes.STRING,
+          type: DataTypes.INTEGER,
           allowNull: false,
         },
         materi: {
           type: DataTypes.TEXT,
-          allowNull: false,
-        },
-        jumlah_peserta: {
-          type: DataTypes.INTEGER,
           allowNull: false,
         },
         keterangan: DataTypes.STRING,
