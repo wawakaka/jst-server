@@ -10,8 +10,12 @@ module.exports = function(sequelize, DataTypes) {
           primaryKey: true,
           autoIncrement: true,
         },
-        sesi: {
-          type: DataTypes.INTEGER,
+        sesi_mulai: {
+          type: DataTypes.TIME,
+          allowNull: false,
+        },
+        sesi_selesai: {
+          type: DataTypes.TIME,
           allowNull: false,
         },
         materi: {
