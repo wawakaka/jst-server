@@ -3,97 +3,36 @@ var passport = require('passport');
 var router = express.Router();
 var models = require('../models');
 
-router.get('/all',
+router.get('/:id',
     passport.authenticate('bearer', {session: false}),
-    getAllPengeluaran()
-);
-router.get('/:email',
-    passport.authenticate('bearer', {session: false}),
-    getPengeluaran()
+    getDetailPengeluaran()
 );
 router.post('/add',
     passport.authenticate('bearer', {session: false}),
-    createPengeluaran()
+    createDetailPengeluaran()
 );
 router.put('/:id/update',
     passport.authenticate('bearer', {session: false}),
-    updatePengeluaran()
+    updateDetailPengeluaran()
 );
 router.delete('/:id/delete',
     passport.authenticate('bearer', {session: false}),
-    deletePengeluaran()
+    deleteDetailPengeluaran()
 );
 
-function getAllPengeluaran() {
-  return function(req, res) {
-    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
-      models.pengeluaran.findAll({
-        include: [
-          {
-            model: models.detail_pengeluaran,
-            as: 'detail_pengeluaran',
-          },
-        ],
-      }).then(function(pengeluaran) {
-        if (pengeluaran) {
-          res.status(200).json({
-            status: 'success',
-            message: 'retrieve pengeluaran',
-            data: pengeluaran,
-          });
-        }
-        else if (res.status(404)) {
-          res.status(404).json({
-            status: 'failed',
-            message: 'not found',
-          });
-        }
-        else {
-          res.json({
-            status: 'failed',
-            message: 'error',
-          });
-        }
-      }).catch(function(err) {
-        res.json({
-          status: 'failed',
-          message: 'error' + err,
-        });
-        res.send(err);
-      });
-    } else if (req.user.length < 1) {
-      res.status(401).json({
-        status: 'failed',
-        message: 'authorization error',
-      });
-    } else {
-      res.json({
-        status: 'failed',
-        message: 'error',
-      });
-    }
-  };
-}
-
-function getPengeluaran() {
+function getDetailPengeluaran() {
   return function(req, res) {
     if (req.user.length >= 1) {
-      models.pengeluaran.findAll({
+      models.detail_pengeluaran.findAll({
         where: {
-          user_email: req.params.email,
+          id: req.params.id,
         },
-        include: [
-          {
-            model: models.detail_pengeluaran,
-            as: 'detail_pengeluaran',
-          },
-        ],
-      }).then(function(pengeluaran) {
-        if (pengeluaran) {
+      }).then(function(data) {
+        if (data) {
           res.status(200).json({
             status: 'success',
-            message: 'retrieve pengeluaran',
-            data: pengeluaran,
+            message: 'retrieve detail pengeluaran',
+            data: data,
           });
         }
         else if (res.status(404)) {
@@ -130,23 +69,15 @@ function getPengeluaran() {
 }
 
 //todo valid format datetime 2014-01-01T10:00:00+07:00
-function createPengeluaran() {
+function createDetailPengeluaran() {
   return function(req, res) {
     if (req.user.length >= 1) {
-      models.pengeluaran.create(
-          req.body.pengeluaran,
-          {
-            include: [
-              {
-                model: models.detail_pengeluaran,
-                as: 'detail_pengeluaran',
-              },
-            ],
-          }
+      models.detail_pengeluaran.create(
+          req.body.detail_pengeluaran
       ).then(function() {
         res.status(200).json({
           status: 'success',
-          message: 'new pengeluaran added',
+          message: 'new detail pengeluaran added',
           data: true,
         });
       }).catch(function(err) {
@@ -170,32 +101,36 @@ function createPengeluaran() {
   };
 }
 
-function updatePengeluaran() {
+function updateDetailPengeluaran() {
   return function(req, res) {
-    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
-      models.pengeluaran.findById(req.params.id).then(function(pengeluaran) {
-        if (pengeluaran) {
-          pengeluaran.update(req.body.pengeluaran).then(function() {
-            res.status(200).json({
-              status: 'success',
-              message: 'pengeluaran updated',
-              data: true,
-            });
-          }).catch(function(err) {
+    if (req.user.length >= 1) {
+      models.detail_pengeluaran.findById(req.params.id).
+          then(function(data) {
+            if (data) {
+              data.update(
+                  req.body.detail_pengeluaran
+              ).then(function() {
+                res.status(200).json({
+                  status: 'success',
+                  message: 'detail pengeluaran updated',
+                  data: true,
+                });
+              }).catch(function(err) {
+                res.json({
+                  status: 'failed',
+                  message: 'error' + err,
+                });
+                res.send(err);
+              });
+            }
+          }).
+          catch(function(err) {
             res.json({
               status: 'failed',
               message: 'error' + err,
             });
             res.send(err);
           });
-        }
-      }).catch(function(err) {
-        res.json({
-          status: 'failed',
-          message: 'error' + err,
-        });
-        res.send(err);
-      });
     } else if (req.user.length < 1) {
       res.status(401).json({
         status: 'failed',
@@ -210,17 +145,17 @@ function updatePengeluaran() {
   };
 }
 
-function deletePengeluaran() {
+function deleteDetailPengeluaran() {
   return function(req, res) {
     if (req.user.length >= 1) {
-      models.pengeluaran.destroy({
+      models.detail_pengeluaran.destroy({
         where: {
           id: req.params.id,
         },
       }).then(function() {
         res.status(200).json({
           status: 'success',
-          message: 'pengeluaran deleted',
+          message: 'detail pengeluaran deleted',
           data: true,
         });
       }).catch(function(err) {
