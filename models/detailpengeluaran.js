@@ -14,6 +14,7 @@ module.exports = function(sequelize, DataTypes) {
         biaya: DataTypes.INTEGER,
         keterangan: DataTypes.TEXT,
         gambar: DataTypes.STRING,
+        status: DataTypes.BOOLEAN,
         tanggal: {
           type: DataTypes.DATE, defaultValue: DataTypes.NOW,
         },
