@@ -11,6 +11,9 @@ module.exports = function(sequelize, DataTypes) {
           autoIncrement: true,
         },
         status: DataTypes.BOOLEAN,
+        tanggal: {
+          type: DataTypes.DATE, defaultValue: DataTypes.NOW,
+        },
       },
       {
         freezeTableName: true,

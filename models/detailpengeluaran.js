@@ -14,9 +14,6 @@ module.exports = function(sequelize, DataTypes) {
         biaya: DataTypes.INTEGER,
         keterangan: DataTypes.TEXT,
         gambar: DataTypes.STRING,
-        tanggal: {
-          type: DataTypes.DATE, defaultValue: DataTypes.NOW,
-        },
       },
       {
         freezeTableName: true,
