@@ -16,13 +16,17 @@ var db = {};
 // }
 
 var sequelize = new Sequelize(
-    'jstapi',
-    'postgres',
-    'ryzen5', {
-      host: '45.77.174.200',
+    'd4b3b7r1a0rbjm',
+    'tkzlhwzjgrjtfi',
+    'a826b9b75487e7fc1a47030ae09fad6fd78cb6a78f2ecdfd830cf1eec4e30f9a', {
+      host: 'ec2-54-197-253-210.compute-1.amazonaws.com',
       dialect: 'postgres',
       define: {
         'timestamps': false,
+      },
+      ssl: true,
+      dialectOptions: {
+        'ssl': true,
       },
     });
 
