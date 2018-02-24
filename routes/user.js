@@ -89,10 +89,11 @@ function updateUser() {
         if (users) {
           users.update({
             nama: req.body.nama,
-          }).then(function() {
+          }).then(function(user) {
             res.status(200).json({
               status: 'success',
               message: 'user updated',
+              data: user,
             });
           });
         }
