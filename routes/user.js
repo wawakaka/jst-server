@@ -84,7 +84,7 @@ function createUser() {
 
 function updateUser() {
   return function(req, res) {
-    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
+    if (req.user.length >= 1) {
       models.user.findById(req.params.email).then(function(users) {
         if (users) {
           users.update({
