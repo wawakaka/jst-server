@@ -10,6 +10,10 @@ module.exports = function(sequelize, DataTypes) {
           primaryKey: true,
           autoIncrement: true,
         },
+        status: DataTypes.BOOLEAN,
+        tanggal: {
+          type: DataTypes.DATE, defaultValue: DataTypes.NOW,
+        },
       },
       {
         freezeTableName: true,
@@ -19,7 +23,7 @@ module.exports = function(sequelize, DataTypes) {
   );
 
   Pengeluaran.associate = function(models) {
-    Pengeluaran.hasMany(models.detail_pengeluaran);
+    Pengeluaran.hasMany(models.detail_pengeluaran, {as: 'detail_pengeluaran'});
     Pengeluaran.belongsTo(models.user);
   };
 
