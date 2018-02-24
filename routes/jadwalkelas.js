@@ -46,7 +46,8 @@ function getAllJadwal() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1) {
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -94,7 +95,8 @@ function getJadwal() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1) {
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -127,7 +129,8 @@ function createJadwal() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1) {
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -167,7 +170,8 @@ function updateJadwal() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1) {
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -201,7 +205,8 @@ function deleteJadwal() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1) {
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -250,7 +255,8 @@ function getJadwalKelasUser() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1) {
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',

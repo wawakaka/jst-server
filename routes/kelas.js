@@ -69,7 +69,8 @@ function getAllKelas() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1) {
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -126,7 +127,8 @@ function getKelas() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1) {
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -170,7 +172,8 @@ function createNewKelas() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1) {
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -210,7 +213,8 @@ function updateKelas() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1) {
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -252,7 +256,8 @@ function updateStatusKelas() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1) {
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',

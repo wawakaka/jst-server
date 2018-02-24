@@ -48,7 +48,8 @@ function getPresensi() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1) {
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -96,7 +97,8 @@ function updatePresensi() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1) {
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',

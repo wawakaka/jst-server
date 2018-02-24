@@ -61,7 +61,8 @@ function getAllPengeluaran() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1) {
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -115,7 +116,8 @@ function getPengeluaran() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1) {
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -156,7 +158,8 @@ function createPengeluaran() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1) {
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -196,7 +199,8 @@ function updatePengeluaran() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1) {
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -230,7 +234,8 @@ function deletePengeluaran() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1) {
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
