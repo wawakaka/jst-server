@@ -27,14 +27,7 @@ router.delete('/:id/delete',
 function getAllPengeluaran() {
   return function(req, res) {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
-      models.pengeluaran.findAll({
-        include: [
-          {
-            model: models.detail_pengeluaran,
-            as: 'detail_pengeluaran',
-          },
-        ],
-      }).then(function(pengeluaran) {
+      models.pengeluaran.findAll().then(function(pengeluaran) {
         if (pengeluaran) {
           res.status(200).json({
             status: 'success',
@@ -79,17 +72,7 @@ function getAllPengeluaran() {
 function getPengeluaran() {
   return function(req, res) {
     if (req.user.length >= 1) {
-      models.pengeluaran.findAll({
-        where: {
-          user_email: req.params.email,
-        },
-        include: [
-          {
-            model: models.detail_pengeluaran,
-            as: 'detail_pengeluaran',
-          },
-        ],
-      }).then(function(pengeluaran) {
+      models.pengeluaran.findAll().then(function(pengeluaran) {
         if (pengeluaran) {
           res.status(200).json({
             status: 'success',
@@ -136,15 +119,7 @@ function createPengeluaran() {
   return function(req, res) {
     if (req.user.length >= 1) {
       models.pengeluaran.create(
-          req.body.pengeluaran,
-          {
-            include: [
-              {
-                model: models.detail_pengeluaran,
-                as: 'detail_pengeluaran',
-              },
-            ],
-          }
+          req.body.pengeluaran
       ).then(function() {
         res.status(200).json({
           status: 'success',

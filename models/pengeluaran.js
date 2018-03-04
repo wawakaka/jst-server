@@ -14,6 +14,10 @@ module.exports = function(sequelize, DataTypes) {
         tanggal: {
           type: DataTypes.DATE, defaultValue: DataTypes.NOW,
         },
+        barang: DataTypes.STRING,
+        biaya: DataTypes.INTEGER,
+        keterangan: DataTypes.TEXT,
+        gambar: DataTypes.STRING,
       },
       {
         freezeTableName: true,
@@ -23,7 +27,6 @@ module.exports = function(sequelize, DataTypes) {
   );
 
   Pengeluaran.associate = function(models) {
-    Pengeluaran.hasMany(models.detail_pengeluaran, {as: 'detail_pengeluaran'});
     Pengeluaran.belongsTo(models.user);
   };
 
