@@ -89,6 +89,7 @@ function updateUser() {
         if (users) {
           users.update({
             nama: req.body.nama,
+            image: req.body.image,
           }).then(function(user) {
             res.status(200).json({
               status: 'success',
