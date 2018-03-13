@@ -43,6 +43,7 @@ function login() {
         models.user.create({
           nama: req.body.nama,
           email: req.body.email,
+          image: req.body.image,
         }).then(function(users) {
           res.status(200).json({
             status: 'success',
