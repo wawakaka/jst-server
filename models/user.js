@@ -12,6 +12,11 @@ module.exports = function(sequelize, DataTypes) {
         },
         nama: {
           type: DataTypes.STRING,
+          allowNull: true,
+        },
+        image: {
+          type: DataTypes.STRING,
+          allowNull: true,
         },
         token: {
           type: DataTypes.STRING,
