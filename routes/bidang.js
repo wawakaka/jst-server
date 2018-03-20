@@ -1,7 +1,7 @@
-var express = require('express');
-var passport = require('passport');
-var router = express.Router();
-var models = require('../models');
+const express = require('express');
+const passport = require('passport');
+const router = express.Router();
+const models = require('../models');
 
 router.get(
     '/all',
@@ -20,18 +20,18 @@ router.delete(
 );
 
 function getBidang() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
-      models.bidang.findAll().then(function(results) {
+      models.bidang.findAll().then(results => {
         res.status(200).json({
           status: 'success',
           message: 'retrieve bidang',
           data: results,
         });
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error ' + err,
+          message: `error ${err}`,
         });
         res.send(err);
       });
@@ -51,20 +51,20 @@ function getBidang() {
 }
 
 function createBidang() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.bidang.create(
           req.body.bidang
-      ).then(function() {
+      ).then(() => {
         res.status(200).json({
           status: 'success',
           message: 'new bidang added',
           data: true,
         });
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error ' + err,
+          message: `error ${err}`,
         });
         res.send(err);
       });
@@ -84,13 +84,13 @@ function createBidang() {
 }
 
 function deleteBidang() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.bidang.destroy({
         where: {
           nama: req.params.nama,
         },
-      }).then(function(bidang) {
+      }).then(bidang => {
         if (bidang) {
           res.status(200).json({
             status: 'success',
@@ -103,10 +103,10 @@ function deleteBidang() {
             message: 'not found ',
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error ' + err,
+          message: `error ${err}`,
         });
         res.send(err);
       });

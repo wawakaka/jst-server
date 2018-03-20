@@ -1,7 +1,7 @@
-var express = require('express');
-var passport = require('passport');
-var router = express.Router();
-var models = require('../models');
+const express = require('express');
+const passport = require('passport');
+const router = express.Router();
+const models = require('../models');
 
 router.get(
     '/all',
@@ -30,7 +30,7 @@ router.put(
 );
 
 function getAllSiswa() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.siswa.findAll({
         include: [
@@ -43,7 +43,7 @@ function getAllSiswa() {
             as: 'laporan_akhir',
           },
         ],
-      }).then(function(siswas) {
+      }).then(siswas => {
         if (siswas) {
           res.status(200).json({
             status: 'success',
@@ -62,10 +62,10 @@ function getAllSiswa() {
             message: 'error',
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });
@@ -85,7 +85,7 @@ function getAllSiswa() {
 }
 
 function getSiswaById() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.siswa.findOne({
         where: {
@@ -101,7 +101,7 @@ function getSiswaById() {
             as: 'laporan_akhir',
           },
         ],
-      }).then(function(siswas) {
+      }).then(siswas => {
         if (siswas) {
           res.status(200).json({
             status: 'success',
@@ -120,7 +120,7 @@ function getSiswaById() {
             message: 'error',
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.send(err);
       });
     } else if (req.user.length < 1 ||
@@ -139,7 +139,7 @@ function getSiswaById() {
 }
 
 function createSiswa() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.siswa.create(
           req.body.siswa,
@@ -150,13 +150,13 @@ function createSiswa() {
               },
             ],
           }
-      ).then(function() {
+      ).then(() => {
         res.status(200).json({
           status: 'success',
           message: 'new siswa added',
           data: true,
         });
-      }).catch(function(err) {
+      }).catch(err => {
         res.send(err);
       });
     } else if (req.user.length < 1 ||
@@ -175,22 +175,22 @@ function createSiswa() {
 }
 
 function editSiswa() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
-      models.siswa.findById(req.params.idSiswa).then(function(siswas) {
+      models.siswa.findById(req.params.idSiswa).then(siswas => {
         if (siswas) {
           siswas.update(
               req.body.siswa
-          ).then(function() {
+          ).then(() => {
             res.status(200).json({
               status: 'success',
               message: 'siswa updated',
               data: true,
             });
-          }).catch(function(err) {
+          }).catch(err => {
             res.status(404).json({
               status: 'failed',
-              message: 'error' + err,
+              message: `error${err}`,
             });
             res.send(err);
           });
@@ -201,7 +201,7 @@ function editSiswa() {
             message: 'not found',
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.send(err);
       });
     } else if (req.user.length < 1 ||
@@ -220,22 +220,22 @@ function editSiswa() {
 }
 
 function updateStatusSiswa() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
-      models.siswa.findById(req.params.id).then(function(siswas) {
+      models.siswa.findById(req.params.id).then(siswas => {
         if (siswas) {
           siswas.update({
             is_active: !siswas.is_active,
-          }).then(function() {
+          }).then(() => {
             res.status(200).json({
               status: 'success',
               message: 'siswa updated',
               data: true,
             });
-          }).catch(function(err) {
+          }).catch(err => {
             res.status(404).json({
               status: 'failed',
-              message: 'error' + err,
+              message: `error${err}`,
             });
             res.send(err);
           });
@@ -246,7 +246,7 @@ function updateStatusSiswa() {
             message: 'not found',
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.send(err);
       });
     } else if (req.user.length < 1 ||

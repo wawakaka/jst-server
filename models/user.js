@@ -1,8 +1,6 @@
-'use strict';
+module.exports = (sequelize, DataTypes) => {
 
-module.exports = function(sequelize, DataTypes) {
-
-  var User = sequelize.define(
+  const User = sequelize.define(
       'user',
       {
         email: {
@@ -38,24 +36,22 @@ module.exports = function(sequelize, DataTypes) {
         freezeTableName: true,
         tableName: 'user',
         underscored: true,
-      }
+      },
   );
 
-  User.findByToken = function(token, cb) {
-    process.nextTick(function() {
+  User.findByToken = (token, cb) => {
+    process.nextTick(() => {
       User.findAll({
         where: {
-          token: token,
+          token,
         },
-      }).then(function(s) {
-        return cb(null, s);
-      }).catch(function(err) {
+      }).then(s => cb(null, s)).catch(err => {
         console.log(err);
       });
     });
   };
 
-  User.associate = function(models) {
+  User.associate = models => {
     User.hasMany(models.kelas, {as: 'list_kelas'});
     User.hasMany(models.pengeluaran);
   };

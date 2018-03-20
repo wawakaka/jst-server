@@ -1,7 +1,7 @@
-var express = require('express');
-var passport = require('passport');
-var router = express.Router();
-var models = require('../models');
+const express = require('express');
+const passport = require('passport');
+const router = express.Router();
+const models = require('../models');
 
 router.get('/:id',
     passport.authenticate('bearer', {session: false}),
@@ -13,13 +13,13 @@ router.put('/:id/update',
 );
 
 function getHasilTesHarian() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1) {
       models.hasil_tes_harian.findAll({
         where: {
           tes_harian_id: req.params.id,
         },
-      }).then(function(results) {
+      }).then(results => {
         if (results) {
           res.status(200).json({
             status: 'success',
@@ -38,10 +38,10 @@ function getHasilTesHarian() {
             message: 'error',
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });
@@ -61,17 +61,17 @@ function getHasilTesHarian() {
 }
 
 function updateHasilTesHarian() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1) {
       models.hasil_tes_harian.destroy({
         where: {
           tes_harian_id: req.params.id,
         },
-      }).then(function(result1) {
+      }).then(result1 => {
         if (result1 || res.status(404)) {
           models.hasil_tes_harian.bulkCreate(
               req.body.hasil_tes_harian
-          ).then(function() {
+          ).then(() => {
             if (res.status(200)) {
               res.status(200).json({
                 status: 'success',
@@ -79,18 +79,18 @@ function updateHasilTesHarian() {
                 data: true,
               });
             }
-          }).catch(function(err) {
+          }).catch(err => {
             res.json({
               status: 'failed to add',
-              message: 'error ' + err,
+              message: `error ${err}`,
             });
             res.send(err);
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed to delete',
-          message: 'error ' + err,
+          message: `error ${err}`,
         });
         res.send(err);
       });

@@ -1,8 +1,6 @@
-'use strict';
+module.exports = (sequelize, DataTypes) => {
 
-module.exports = function(sequelize, DataTypes) {
-
-  var Siswa = sequelize.define(
+  const Siswa = sequelize.define(
       'siswa',
       {
         id: {
@@ -29,10 +27,10 @@ module.exports = function(sequelize, DataTypes) {
         freezeTableName: true,
         tableName: 'siswa',
         underscored: true,
-      }
+      },
   );
 
-  Siswa.associate = function(models) {
+  Siswa.associate = models => {
     Siswa.hasOne(models.laporan_akhir);
     Siswa.hasMany(models.hasil_tes_harian, {as: 'hasil_tes_harian'});
     Siswa.belongsTo(models.sekolah);

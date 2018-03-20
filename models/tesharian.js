@@ -1,8 +1,6 @@
-'use strict';
+module.exports = (sequelize, DataTypes) => {
 
-module.exports = function(sequelize, DataTypes) {
-
-  var TesHarian = sequelize.define(
+  const TesHarian = sequelize.define(
       'tes_harian',
       {
         id: {
@@ -17,10 +15,10 @@ module.exports = function(sequelize, DataTypes) {
         freezeTableName: true,
         tableName: 'tes_harian',
         underscored: true,
-      }
+      },
   );
 
-  TesHarian.associate = function(models) {
+  TesHarian.associate = models => {
     TesHarian.hasMany(models.hasil_tes_harian, {as: 'hasil_tes_harian'});
     TesHarian.belongsTo(models.jadwal_kelas);
   };

@@ -1,7 +1,7 @@
-var express = require('express');
-var passport = require('passport');
-var router = express.Router();
-var models = require('../models');
+const express = require('express');
+const passport = require('passport');
+const router = express.Router();
+const models = require('../models');
 
 router.get('/:jadwal_kela_id',
     passport.authenticate('bearer', {session: false}),
@@ -21,13 +21,13 @@ router.delete('/:id/delete',
 );
 
 function getKegiatan() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1) {
       models.kegiatan.findAll({
         where: {
           jadwal_kela_id: req.params.jadwal_kela_id,
         },
-      }).then(function(kegiatan) {
+      }).then(kegiatan => {
         if (kegiatan) {
           res.status(200).json({
             status: 'success',
@@ -47,10 +47,10 @@ function getKegiatan() {
             message: 'error',
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });
@@ -71,20 +71,20 @@ function getKegiatan() {
 
 //todo valid format datetime 2014-01-01T10:00:00+07:00
 function createKegiatan() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1) {
       models.kegiatan.create(
           req.body.kegiatan
-      ).then(function() {
+      ).then(() => {
         res.status(200).json({
           status: 'success',
           message: 'new kegiatan added',
           data: true,
         });
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });
@@ -104,28 +104,28 @@ function createKegiatan() {
 }
 
 function updateKegiatan() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1) {
-      models.kegiatan.findById(req.params.id).then(function(kegiatan) {
+      models.kegiatan.findById(req.params.id).then(kegiatan => {
         if (kegiatan) {
-          kegiatan.update(req.body.kegiatan).then(function() {
+          kegiatan.update(req.body.kegiatan).then(() => {
             res.status(200).json({
               status: 'success',
               message: 'kegiatan updated',
               data: true,
             });
-          }).catch(function(err) {
+          }).catch(err => {
             res.json({
               status: 'failed',
-              message: 'error' + err,
+              message: `error${err}`,
             });
             res.send(err);
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });
@@ -145,22 +145,22 @@ function updateKegiatan() {
 }
 
 function deleteKegiatan() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1) {
       models.kegiatan.destroy({
         where: {
           id: req.params.id,
         },
-      }).then(function() {
+      }).then(() => {
         res.status(200).json({
           status: 'success',
           message: 'kegiatan deleted',
           data: true,
         });
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });

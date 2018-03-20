@@ -1,7 +1,7 @@
-var express = require('express');
-var passport = require('passport');
-var router = express.Router();
-var models = require('../models');
+const express = require('express');
+const passport = require('passport');
+const router = express.Router();
+const models = require('../models');
 
 router.get(
     '/:id',
@@ -18,7 +18,7 @@ router.put('/:id/update',
 );
 
 function getUpdatedTesHarian() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1) {
       models.tes_harian.find({
         where: {
@@ -30,7 +30,7 @@ function getUpdatedTesHarian() {
             as: 'hasil_tes_harian',
           },
         ],
-      }).then(function(results) {
+      }).then(results => {
         if (results) {
           res.status(200).json({
             status: 'success',
@@ -43,10 +43,10 @@ function getUpdatedTesHarian() {
             message: 'error',
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error ' + err,
+          message: `error ${err}`,
         });
         res.send(err);
       });
@@ -65,7 +65,7 @@ function getUpdatedTesHarian() {
 }
 
 function getTesHarian() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1) {
       models.tes_harian.find({
         where: {
@@ -77,7 +77,7 @@ function getTesHarian() {
             as: 'hasil_tes_harian',
           },
         ],
-      }).then(function(results) {
+      }).then(results => {
         if (results) {
           res.status(200).json({
             status: 'success',
@@ -96,16 +96,16 @@ function getTesHarian() {
                   },
                 ],
               }
-          ).then(function(results) {
+          ).then(results => {
             res.status(200).json({
               status: 'success',
               message: 'new tes harian added',
               data: results,
             });
-          }).catch(function(err) {
+          }).catch(err => {
             res.json({
               status: 'failed',
-              message: 'error' + err,
+              message: `error${err}`,
             });
             res.send(err);
           });
@@ -117,10 +117,10 @@ function getTesHarian() {
             data: results,
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });
@@ -139,9 +139,9 @@ function getTesHarian() {
 }
 
 function updateTesHarian() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1) {
-      models.tes_harian.findById(req.params.id).then(function(results) {
+      models.tes_harian.findById(req.params.id).then(results => {
         if (results) {
           results.update(
               req.body.tes_harian
@@ -158,10 +158,10 @@ function updateTesHarian() {
             message: 'not found',
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });

@@ -1,15 +1,13 @@
-'use strict';
+module.exports = (sequelize, DataTypes) => {
 
-module.exports = function(sequelize, DataTypes) {
-
-  var Presensi = sequelize.define(
+  const Presensi = sequelize.define(
       'presensi',
       {},
       {
         freezeTableName: true,
         tableName: 'presensi',
         underscored: true,
-      }
+      },
   );
 
   return Presensi;

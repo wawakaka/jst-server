@@ -1,7 +1,7 @@
-var express = require('express');
-var passport = require('passport');
-var router = express.Router();
-var models = require('../models');
+const express = require('express');
+const passport = require('passport');
+const router = express.Router();
+const models = require('../models');
 
 router.get('/:kelas',
     passport.authenticate('bearer', {session: false}),
@@ -29,9 +29,9 @@ router.get('/user/:kelasid',
 );
 
 function getAllJadwal() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1) {
-      models.jadwal_kelas.findAll().then(function(jadwal) {
+      models.jadwal_kelas.findAll().then(jadwal => {
         if (jadwal) {
           res.status(200).json({
             status: 'success',
@@ -39,10 +39,10 @@ function getAllJadwal() {
             data: jadwal,
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });
@@ -62,13 +62,13 @@ function getAllJadwal() {
 }
 
 function getJadwal() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1) {
       models.jadwal_kelas.findAll({
         where: {
           kela_id: req.params.kelas,
         },
-      }).then(function(jadwal) {
+      }).then(jadwal => {
         if (jadwal) {
           res.status(200).json({
             status: 'success',
@@ -88,10 +88,10 @@ function getJadwal() {
             message: 'error',
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });
@@ -112,20 +112,20 @@ function getJadwal() {
 
 //todo valid format datetime 2014-01-01T10:00:00+07:00
 function createJadwal() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.jadwal_kelas.create(
           req.body.jadwal_kelas
-      ).then(function() {
+      ).then(() => {
         res.status(200).json({
           status: 'success',
           message: 'new jadwal added',
           data: true,
         });
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });
@@ -145,28 +145,28 @@ function createJadwal() {
 }
 
 function updateJadwal() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
-      models.jadwal_kelas.findById(req.params.id).then(function(jadwal) {
+      models.jadwal_kelas.findById(req.params.id).then(jadwal => {
         if (jadwal) {
-          jadwal.update(req.body.jadwal_kelas).then(function() {
+          jadwal.update(req.body.jadwal_kelas).then(() => {
             res.status(200).json({
               status: 'success',
               message: 'jadwal_kelas updated',
               data: true,
             });
-          }).catch(function(err) {
+          }).catch(err => {
             res.json({
               status: 'failed',
-              message: 'error' + err,
+              message: `error${err}`,
             });
             res.send(err);
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });
@@ -186,22 +186,22 @@ function updateJadwal() {
 }
 
 function deleteJadwal() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.jadwal_kelas.destroy({
         where: {
           id: req.params.id,
         },
-      }).then(function() {
+      }).then(() => {
         res.status(200).json({
           status: 'success',
           message: 'jadwal deleted',
           data: true,
         });
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });
@@ -221,20 +221,20 @@ function deleteJadwal() {
 }
 
 function getJadwalKelasUser() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1) {
       models.kelas.find({
         where: {
           id: req.params.kelasid,
         },
-      }).then(function(kelas) {
+      }).then(kelas => {
         console.log(kelas);
         if (kelas) {
           models.user.find({
             where: {
               email: kelas.user_email,
             },
-          }).then(function(user) {
+          }).then(user => {
             res.status(200).json({
               status: 'success',
               message: 'retrieve user',
@@ -248,10 +248,10 @@ function getJadwalKelasUser() {
             message: 'not found',
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });

@@ -1,7 +1,7 @@
-var express = require('express');
-var passport = require('passport');
-var router = express.Router();
-var models = require('../models');
+const express = require('express');
+const passport = require('passport');
+const router = express.Router();
+const models = require('../models');
 
 router.get(
     '/all',
@@ -20,18 +20,18 @@ router.delete(
 );
 
 function getSekolah() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
-      models.sekolah.findAll().then(function(results) {
+      models.sekolah.findAll().then(results => {
         res.status(200).json({
           status: 'success',
           message: 'retrieve sekolah',
           data: results,
         });
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error ' + err,
+          message: `error ${err}`,
         });
         res.send(err);
       });
@@ -51,20 +51,20 @@ function getSekolah() {
 }
 
 function createSekolah() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.sekolah.create(
           req.body.sekolah
-      ).then(function() {
+      ).then(() => {
         res.status(200).json({
           status: 'success',
           message: 'new sekolah added',
           data: true,
         });
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error ' + err,
+          message: `error ${err}`,
         });
         res.send(err);
       });
@@ -84,13 +84,13 @@ function createSekolah() {
 }
 
 function deleteSekolah() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.sekolah.destroy({
         where: {
           nama: req.params.nama,
         },
-      }).then(function(bidang) {
+      }).then(bidang => {
         if (bidang) {
           res.status(200).json({
             status: 'success',
@@ -103,10 +103,10 @@ function deleteSekolah() {
             message: 'not found ',
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error ' + err,
+          message: `error ${err}`,
         });
         res.send(err);
       });

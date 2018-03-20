@@ -1,8 +1,6 @@
-'use strict';
+module.exports = (sequelize, DataTypes) => {
 
-module.exports = function(sequelize, DataTypes) {
-
-  var Sekolah = sequelize.define(
+  const Sekolah = sequelize.define(
       'sekolah',
       {
         nama: {
@@ -15,10 +13,10 @@ module.exports = function(sequelize, DataTypes) {
         freezeTableName: true,
         tableName: 'sekolah',
         underscored: true,
-      }
+      },
   );
 
-  Sekolah.associate = function(models) {
+  Sekolah.associate = models => {
     Sekolah.hasMany(models.siswa, {as: 'list_siswa'});
     Sekolah.hasMany(models.kelas, {as: 'list_kelas'});
   };

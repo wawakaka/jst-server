@@ -1,25 +1,23 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var passport = require('passport');
-var Strategy = require('passport-http-bearer').Strategy;
-
-var models = require('./models');
-var index = require('./routes/index');
-var user = require('./routes/user');
-var bidang = require('./routes/bidang');
-var siswa = require('./routes/siswa');
-var kelas = require('./routes/kelas');
-var tesHarian = require('./routes/tesharian');
-var hasilTesHarian = require('./routes/hasiltesharian');
-var presensi = require('./routes/presensi');
-var jadwalKelas = require('./routes/jadwalkelas');
-var sekolah = require('./routes/sekolah');
-var kegiatan = require('./routes/kegiatan');
-var pengeluaran = require('./routes/pengeluaran');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const passport = require('passport');
+const Strategy = require('passport-http-bearer').Strategy;
+const models = require('./models');
+const index = require('./routes/index');
+const user = require('./routes/user');
+const bidang = require('./routes/bidang');
+const siswa = require('./routes/siswa');
+const kelas = require('./routes/kelas');
+const tesHarian = require('./routes/tesharian');
+const hasilTesHarian = require('./routes/hasiltesharian');
+const presensi = require('./routes/presensi');
+const jadwalKelas = require('./routes/jadwalkelas');
+const sekolah = require('./routes/sekolah');
+const kegiatan = require('./routes/kegiatan');
+const pengeluaran = require('./routes/pengeluaran');
 
 // Configure the Bearer strategy for use by Passport.
 //
@@ -28,16 +26,16 @@ var pengeluaran = require('./routes/pengeluaran');
 // `cb` with a user object, which will be set at `req.user` in route handlers
 // after authentication.
 passport.use(new Strategy(
-    function(token, cb) {
-      models.user.findByToken(token, function(err, user) {
-        if (err) { return cb(err); }
-        if (!user) { return cb(null, false); }
+    (token, cb) => {
+      models.user.findByToken(token, (err, user) => {
+        if (err) return cb(err);
+        if (!user) return cb(null, false);
         return cb(null, user);
       });
-    })
+    }),
 );
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -65,14 +63,14 @@ app.use('/kegiatan', kegiatan);
 app.use('/pengeluaran', pengeluaran);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

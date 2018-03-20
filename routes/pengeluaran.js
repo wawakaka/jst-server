@@ -1,7 +1,7 @@
-var express = require('express');
-var passport = require('passport');
-var router = express.Router();
-var models = require('../models');
+const express = require('express');
+const passport = require('passport');
+const router = express.Router();
+const models = require('../models');
 
 router.get('/all',
     passport.authenticate('bearer', {session: false}),
@@ -25,9 +25,9 @@ router.delete('/:id/delete',
 );
 
 function getAllPengeluaran() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
-      models.pengeluaran.findAll().then(function(pengeluaran) {
+      models.pengeluaran.findAll().then(pengeluaran => {
         if (pengeluaran) {
           res.status(200).json({
             status: 'success',
@@ -47,10 +47,10 @@ function getAllPengeluaran() {
             message: 'error',
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });
@@ -70,9 +70,9 @@ function getAllPengeluaran() {
 }
 
 function getPengeluaran() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1) {
-      models.pengeluaran.findAll().then(function(pengeluaran) {
+      models.pengeluaran.findAll().then(pengeluaran => {
         if (pengeluaran) {
           res.status(200).json({
             status: 'success',
@@ -92,10 +92,10 @@ function getPengeluaran() {
             message: 'error',
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });
@@ -116,20 +116,20 @@ function getPengeluaran() {
 
 //todo valid format datetime 2014-01-01T10:00:00+07:00
 function createPengeluaran() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1) {
       models.pengeluaran.create(
           req.body.pengeluaran
-      ).then(function() {
+      ).then(() => {
         res.status(200).json({
           status: 'success',
           message: 'new pengeluaran added',
           data: true,
         });
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });
@@ -149,28 +149,28 @@ function createPengeluaran() {
 }
 
 function updatePengeluaran() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
-      models.pengeluaran.findById(req.params.id).then(function(pengeluaran) {
+      models.pengeluaran.findById(req.params.id).then(pengeluaran => {
         if (pengeluaran) {
-          pengeluaran.update(req.body.pengeluaran).then(function() {
+          pengeluaran.update(req.body.pengeluaran).then(() => {
             res.status(200).json({
               status: 'success',
               message: 'pengeluaran updated',
               data: true,
             });
-          }).catch(function(err) {
+          }).catch(err => {
             res.json({
               status: 'failed',
-              message: 'error' + err,
+              message: `error${err}`,
             });
             res.send(err);
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });
@@ -190,22 +190,22 @@ function updatePengeluaran() {
 }
 
 function deletePengeluaran() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1) {
       models.pengeluaran.destroy({
         where: {
           id: req.params.id,
         },
-      }).then(function() {
+      }).then(() => {
         res.status(200).json({
           status: 'success',
           message: 'pengeluaran deleted',
           data: true,
         });
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });

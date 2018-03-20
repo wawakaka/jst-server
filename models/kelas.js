@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = function(sequelize, DataTypes) {
+module.exports = (sequelize, DataTypes) => {
 
   var Kelas = sequelize.define(
       'kelas',
@@ -25,10 +23,10 @@ module.exports = function(sequelize, DataTypes) {
         freezeTableName: true,
         tableName: 'kelas',
         underscored: true,
-      }
+      },
   );
 
-  Kelas.associate = function(models) {
+  Kelas.associate = models => {
     Kelas.belongsTo(models.user);
     Kelas.belongsTo(models.bidang);
     Kelas.hasMany(models.jadwal_kelas, {as: 'jadwal_kelas'});

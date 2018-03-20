@@ -1,7 +1,7 @@
-var express = require('express');
-var passport = require('passport');
-var router = express.Router();
-var models = require('../models');
+const express = require('express');
+const passport = require('passport');
+const router = express.Router();
+const models = require('../models');
 
 router.get(
     '/all',
@@ -30,7 +30,7 @@ router.put(
 );
 
 function getAllKelas() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.kelas.findAll({
         include: [
@@ -43,7 +43,7 @@ function getAllKelas() {
             as: 'list_siswa',
           },
         ],
-      }).then(function(kelas) {
+      }).then(kelas => {
         if (kelas) {
           res.status(200).json({
             status: 'success',
@@ -62,10 +62,10 @@ function getAllKelas() {
             message: 'error',
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });
@@ -85,7 +85,7 @@ function getAllKelas() {
 }
 
 function getKelas() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1) {
       models.kelas.findAll({
         where: {
@@ -101,7 +101,7 @@ function getKelas() {
             as: 'list_siswa',
           },
         ],
-      }).then(function(kelas) {
+      }).then(kelas => {
         if (kelas) {
           res.status(200).json({
             status: 'success',
@@ -120,10 +120,10 @@ function getKelas() {
             message: 'error',
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });
@@ -143,7 +143,7 @@ function getKelas() {
 }
 
 function createNewKelas() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.kelas.create(
           req.body.kelas,
@@ -159,16 +159,16 @@ function createNewKelas() {
               },
             ],
           }
-      ).then(function() {
+      ).then(() => {
         res.status(200).json({
           status: 'success',
           message: 'new kelas added',
           data: true,
         });
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });
@@ -188,28 +188,28 @@ function createNewKelas() {
 }
 
 function updateKelas() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
-      models.kelas.findById(req.params.id).then(function(kelas) {
+      models.kelas.findById(req.params.id).then(kelas => {
         if (kelas) {
-          kelas.update(req.body.kelas).then(function() {
+          kelas.update(req.body.kelas).then(() => {
             res.status(200).json({
               status: 'success',
               message: 'kelas updated',
               data: true,
             });
-          }).catch(function(err) {
+          }).catch(err => {
             res.json({
               status: 'failed',
-              message: 'error' + err,
+              message: `error${err}`,
             });
             res.send(err);
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });
@@ -229,30 +229,30 @@ function updateKelas() {
 }
 
 function updateStatusKelas() {
-  return function(req, res) {
+  return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
-      models.kelas.findById(req.params.id).then(function(kelas) {
+      models.kelas.findById(req.params.id).then(kelas => {
         if (kelas) {
           kelas.update({
             is_active: !kelas.is_active,
-          }).then(function() {
+          }).then(() => {
             res.status(200).json({
               status: 'success',
               message: 'kelas status updated',
               data: true,
             });
-          }).catch(function(err) {
+          }).catch(err => {
             res.json({
               status: 'failed',
-              message: 'error' + err,
+              message: `error${err}`,
             });
             res.send(err);
           });
         }
-      }).catch(function(err) {
+      }).catch(err => {
         res.json({
           status: 'failed',
-          message: 'error' + err,
+          message: `error${err}`,
         });
         res.send(err);
       });
