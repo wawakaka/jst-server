@@ -1,6 +1,9 @@
 # JST
-
-<a href="https://travis-ci.org/wawakaka/jst-server"><img src="https://travis-ci.org/wawakaka/jst-server.svg?branch=master"></a>
+<p align="center">
+  <a href="https://travis-ci.org/wawakaka/jst-server"><img src="https://travis-ci.org/wawakaka/jst-server.svg?branch=master"></a>
+  <a href="https://david-dm.org/wawakaka/jst-server" title="dependencies status"><img src="https://david-dm.org/wawakaka/jst-server/status.svg"/></a>
+  <a href="https://david-dm.org/wawakaka/jst-server?type=dev" title="devDependencies status"><img src="https://david-dm.org/wawakaka/jst-server/dev-status.svg"/></a>
+</p>
 
 This repository Lorem Ipsum is simply dummy 
 text of the printing and typesetting industry. 
