@@ -5,11 +5,15 @@ const models = require('../models');
 
 router.get('/:id',
     passport.authenticate('bearer', {session: false}),
-    getHasilTesHarian()
+    getHasilTesHarian(),
+);
+router.put('/:id/updatebulk',
+    passport.authenticate('bearer', {session: false}),
+    updateHasilTesHarian(),
 );
 router.put('/:id/update',
     passport.authenticate('bearer', {session: false}),
-    updateHasilTesHarian()
+    updateSingleHasilTesHarian(),
 );
 
 function getHasilTesHarian() {
@@ -67,10 +71,10 @@ function updateHasilTesHarian() {
         where: {
           tes_harian_id: req.params.id,
         },
-      }).then(result1 => {
-        if (result1 || res.status(404)) {
+      }).then(results => {
+        if (results || res.status(404)) {
           models.hasil_tes_harian.bulkCreate(
-              req.body.hasil_tes_harian
+              req.body.hasil_tes_harian,
           ).then(() => {
             if (res.status(200)) {
               res.status(200).json({
@@ -99,6 +103,45 @@ function updateHasilTesHarian() {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
+      });
+    } else {
+      res.json({
+        status: 'failed',
+        message: 'error',
+      });
+    }
+  };
+}
+
+function updateSingleHasilTesHarian() {
+  return (req, res) => {
+    if (req.user.length >= 1) {
+      models.hasil_tes_harian.findById(req.params.id).then(results => {
+        if (results) {
+          results.update(
+              req.body.hasil_tes_harian,
+          ).then(() => {
+            res.status(200).json({
+              status: 'success',
+              message: 'hasil tes harian updated',
+              data: true,
+            });
+          }).catch(err => {
+            res.status(404).json({
+              status: 'failed',
+              message: `error${err}`,
+            });
+            res.send(err);
+          });
+        }
+        else {
+          res.status(404).json({
+            status: 'failed',
+            message: 'not found',
+          });
+        }
+      }).catch(err => {
+        res.send(err);
       });
     } else {
       res.json({

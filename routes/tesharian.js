@@ -3,8 +3,7 @@ const passport = require('passport');
 const router = express.Router();
 const models = require('../models');
 
-router.get(
-    '/:id',
+router.get('/:id',
     passport.authenticate('bearer', {session: false}),
     getUpdatedTesHarian()
 );
