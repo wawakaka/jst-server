@@ -2,17 +2,58 @@ const express = require('express');
 const passport = require('passport');
 const router = express.Router();
 const models = require('../models');
+const Json2csvParser = require('json2csv').Parser;
+const fields = ['jadwal_kelas_id', 'siswa_id'];
+const json2csvParser = new Json2csvParser({fields});
 
+router.get('/:id/download',
+    passport.authenticate('bearer', {session: false}),
+    downloadCsv());
 router.get(
     '/:id',
     passport.authenticate('bearer', {session: false}),
-    getPresensi()
+    getPresensi(),
 );
 router.post(
     '/:id/update',
     passport.authenticate('bearer', {session: false}),
-    updatePresensi()
+    updatePresensi(),
 );
+
+function downloadCsv() {
+  return (req, res) => {
+    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
+      models.presensi.findAll({
+        where: {
+          jadwal_kela_id: req.params.id,
+        },
+      }).then(results => {
+        const csv = json2csvParser.parse(results);
+        res.setHeader('Content-disposition',
+            'attachment; filename=presensi.csv');
+        res.set('Content-Type', 'text/csv');
+        res.status(200).send(csv);
+      }).catch(err => {
+        res.json({
+          status: 'failed',
+          message: `error ${err}`,
+        });
+        res.send(err);
+      });
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
+      res.status(401).json({
+        status: 'failed',
+        message: 'authorization error',
+      });
+    } else {
+      res.json({
+        status: 'failed',
+        message: 'error',
+      });
+    }
+  };
+}
 
 function getPresensi() {
   return (req, res) => {
@@ -73,7 +114,7 @@ function updatePresensi() {
       }).then(result1 => {
         if (result1 || res.status(404)) {
           models.presensi.bulkCreate(
-              req.body.presensi
+              req.body.presensi,
           ).then(result => {
             if (res.status(200)) {
               res.status(200).json({
