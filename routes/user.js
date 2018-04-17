@@ -8,43 +8,41 @@ router.post('/create', createUser());
 router.put(
     '/:email',
     passport.authenticate('bearer', {session: false}),
-    updateUser()
+    updateUser(),
 );
 router.put(
     '/:email/activate',
     passport.authenticate('bearer', {session: false}),
-    activateUser()
+    activateUser(),
 );
 router.get(
     '/all',
     passport.authenticate('bearer', {session: false}),
-    getAllUser()
+    getAllUser(),
 );
 //this is just example
 router.get(
     '/:email',
     passport.authenticate('bearer', {session: false}),
-    getUserByEmail()
+    getUserByEmail(),
 );
 
 function login() {
   return (req, res) => {
-    models.user.findById(
-        req.params.email
-    ).then(users => {
+    models.user.findById(req.params.email).then(users => {
       if (users) {
-        res.status(200).json({
-          status: 'success',
-          message: 'login success',
-          data: users,
+        users.update({token: req.body.user.token}).then(updatedUser =>
+            res.status(200).json({
+              status: 'success',
+              message: 'login success',
+              data: updatedUser,
+            }),
+        ).catch(err => {
+          res.send(err);
         });
       }
       else if (res.status(404)) {
-        models.user.create({
-          nama: req.body.nama,
-          email: req.body.email,
-          image: req.body.image,
-        }).then(users => {
+        models.user.create(req.body.user).then(users => {
           res.status(200).json({
             status: 'success',
             message: 'new user added',
