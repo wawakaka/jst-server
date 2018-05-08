@@ -90,8 +90,7 @@ function getHasilTesHarian() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1 ||
-        req.user[0].dataValues.is_super_user === false) {
+    } else if (req.user.length < 1) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -139,8 +138,7 @@ function updateHasilTesHarian() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1 ||
-        req.user[0].dataValues.is_super_user === false) {
+    } else if (req.user.length < 1) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -183,6 +181,11 @@ function updateSingleHasilTesHarian() {
         }
       }).catch(err => {
         res.send(err);
+      });
+    } else if (req.user.length < 1) {
+      res.status(401).json({
+        status: 'failed',
+        message: 'authorization error',
       });
     } else {
       res.json({

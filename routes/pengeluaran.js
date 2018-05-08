@@ -7,7 +7,7 @@ router.get('/all',
     passport.authenticate('bearer', {session: false}),
     getAllPengeluaran()
 );
-router.get('/:email',
+router.get('/:id',
     passport.authenticate('bearer', {session: false}),
     getPengeluaran()
 );
@@ -72,7 +72,11 @@ function getAllPengeluaran() {
 function getPengeluaran() {
   return (req, res) => {
     if (req.user.length >= 1) {
-      models.pengeluaran.findAll().then(pengeluaran => {
+      models.pengeluaran.findAll({
+        where: {
+          event_id: req.params.id,
+        },
+      }).then(pengeluaran => {
         if (pengeluaran) {
           res.status(200).json({
             status: 'success',
@@ -99,8 +103,7 @@ function getPengeluaran() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1 ||
-        req.user[0].dataValues.is_super_user === false) {
+    } else if (req.user.length < 1) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -133,8 +136,7 @@ function createPengeluaran() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1 ||
-        req.user[0].dataValues.is_super_user === false) {
+    } else if (req.user.length < 1) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -174,8 +176,7 @@ function updatePengeluaran() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1 ||
-        req.user[0].dataValues.is_super_user === false) {
+    } else if (req.user.length < 1) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -209,8 +210,7 @@ function deletePengeluaran() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1 ||
-        req.user[0].dataValues.is_super_user === false) {
+    } else if (req.user.length < 1) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',

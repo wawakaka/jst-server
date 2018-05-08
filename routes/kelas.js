@@ -6,27 +6,27 @@ const models = require('../models');
 router.get(
     '/all',
     passport.authenticate('bearer', {session: false}),
-    getAllKelas()
+    getAllKelas(),
 );
 router.get(
     '/:email',
     passport.authenticate('bearer', {session: false}),
-    getKelas()
+    getKelas(),
 );
 router.post(
     '/create',
     passport.authenticate('bearer', {session: false}),
-    createNewKelas()
+    createNewKelas(),
 );
 router.put(
     '/:id/update',
     passport.authenticate('bearer', {session: false}),
-    updateKelas()
+    updateKelas(),
 );
 router.put(
     '/:id/updatestatus',
     passport.authenticate('bearer', {session: false}),
-    updateStatusKelas()
+    updateStatusKelas(),
 );
 
 function getAllKelas() {
@@ -119,8 +119,7 @@ function getKelas() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1 ||
-        req.user[0].dataValues.is_super_user === false) {
+    } else if (req.user.length < 1) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -146,7 +145,7 @@ function createNewKelas() {
                 as: 'jadwal_kelas',
               },
             ],
-          }
+          },
       ).then(() => {
         res.status(200).json({
           status: 'success',

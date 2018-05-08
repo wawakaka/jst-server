@@ -95,8 +95,7 @@ function getKegiatan() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1 ||
-        req.user[0].dataValues.is_super_user === false) {
+    } else if (req.user.length < 1) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -129,8 +128,7 @@ function createKegiatan() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1 ||
-        req.user[0].dataValues.is_super_user === false) {
+    } else if (req.user.length < 1) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -170,8 +168,7 @@ function updateKegiatan() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1 ||
-        req.user[0].dataValues.is_super_user === false) {
+    } else if (req.user.length < 1) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -205,8 +202,7 @@ function deleteKegiatan() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1 ||
-        req.user[0].dataValues.is_super_user === false) {
+    } else if (req.user.length < 1) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',

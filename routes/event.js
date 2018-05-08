@@ -11,10 +11,20 @@ router.get(
     passport.authenticate('bearer', {session: false}),
     getAllEvent(),
 );
+router.get(
+    '/:id',
+    passport.authenticate('bearer', {session: false}),
+    getEvent(),
+);
 router.post(
     '/create',
     passport.authenticate('bearer', {session: false}),
     createEvent(),
+);
+router.put(
+    '/:id/update',
+    passport.authenticate('bearer', {session: false}),
+    updateEvent(),
 );
 router.delete(
     '/:id/delete',
@@ -24,7 +34,7 @@ router.delete(
 
 function getAllEvent() {
   return (req, res) => {
-    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
+    if (req.user.length >= 1) {
       models.event.findAll({
         include: [
           {
@@ -48,6 +58,55 @@ function getAllEvent() {
           message: `error ${err}`,
         });
         res.send(err);
+      });
+    } else if (req.user.length < 1) {
+      res.status(401).json({
+        status: 'failed',
+        message: 'authorization error',
+      });
+    } else {
+      res.json({
+        status: 'failed',
+        message: 'error',
+      });
+    }
+  };
+}
+
+function getEvent() {
+  return (req, res) => {
+    if (req.user.length >= 1) {
+      models.event.find({
+        where: {
+          id: req.params.id,
+        },
+        include: [
+          {
+            model: models.kelas,
+            as: 'list_kelas',
+          },
+          {
+            model: models.pengeluaran,
+            as: 'list_pengeluaran',
+          },
+        ],
+      }).then(results => {
+        res.status(200).json({
+          status: 'success',
+          message: 'retrieve event',
+          data: results,
+        });
+      }).catch(err => {
+        res.json({
+          status: 'failed',
+          message: `error ${err}`,
+        });
+        res.send(err);
+      });
+    } else if (req.user.length < 1) {
+      res.status(401).json({
+        status: 'failed',
+        message: 'authorization error',
       });
     } else {
       res.json({
@@ -85,6 +144,47 @@ function createEvent() {
         res.json({
           status: 'failed',
           message: `error ${err}`,
+        });
+        res.send(err);
+      });
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
+      res.status(401).json({
+        status: 'failed',
+        message: 'authorization error',
+      });
+    } else {
+      res.json({
+        status: 'failed',
+        message: 'error',
+      });
+    }
+  };
+}
+
+function updateEvent() {
+  return (req, res) => {
+    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
+      models.event.findById(req.params.id).then(event => {
+        if (event) {
+          event.update(req.body.event).then(() => {
+            res.status(200).json({
+              status: 'success',
+              message: 'event updated',
+              data: true,
+            });
+          }).catch(err => {
+            res.json({
+              status: 'failed',
+              message: `error${err}`,
+            });
+            res.send(err);
+          });
+        }
+      }).catch(err => {
+        res.json({
+          status: 'failed',
+          message: `error${err}`,
         });
         res.send(err);
       });
