@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Pengeluaran.associate = models => {
     Pengeluaran.belongsTo(models.user);
+    Pengeluaran.belongsTo(models.event);
   };
 
   return Pengeluaran;

@@ -38,10 +38,6 @@ function getAllKelas() {
             model: models.jadwal_kelas,
             as: 'jadwal_kelas',
           },
-          {
-            model: models.siswa,
-            as: 'list_siswa',
-          },
         ],
       }).then(kelas => {
         if (kelas) {
@@ -96,10 +92,6 @@ function getKelas() {
             model: models.jadwal_kelas,
             as: 'jadwal_kelas',
           },
-          {
-            model: models.siswa,
-            as: 'list_siswa',
-          },
         ],
       }).then(kelas => {
         if (kelas) {
@@ -152,10 +144,6 @@ function createNewKelas() {
               {
                 model: models.jadwal_kelas,
                 as: 'jadwal_kelas',
-              },
-              {
-                model: models.siswa,
-                as: 'list_siswa',
               },
             ],
           }
