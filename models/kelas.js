@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
 
-  var Kelas = sequelize.define(
+  const Kelas = sequelize.define(
       'kelas',
       {
         id: {
@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     Kelas.belongsTo(models.event);
     Kelas.belongsTo(models.bidang);
     Kelas.hasMany(models.jadwal_kelas, {as: 'jadwal_kelas'});
+    Kelas.hasMany(models.siswa, {as: 'list_siswa'});
   };
 
   return Kelas;

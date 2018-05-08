@@ -34,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     Siswa.hasOne(models.laporan_akhir);
     Siswa.hasMany(models.hasil_tes_harian, {as: 'hasil_tes_harian'});
     Siswa.belongsTo(models.sekolah);
+    Siswa.belongsTo(models.kelas);
     Siswa.belongsToMany(models.jadwal_kelas, {through: 'presensi'});
   };
 
