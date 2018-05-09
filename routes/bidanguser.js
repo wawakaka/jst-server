@@ -2,115 +2,50 @@ const express = require('express');
 const passport = require('passport');
 const router = express.Router();
 const models = require('../models');
+const Json2csvParser = require('json2csv').Parser;
+const fields = ['jadwal_kelas_id', 'siswa_id'];
+const json2csvParser = new Json2csvParser({fields});
 
 router.get(
     '/all',
     passport.authenticate('bearer', {session: false}),
-    getAllKelas(),
+    getAllBidangUser(),
 );
 router.get(
     '/:id',
     passport.authenticate('bearer', {session: false}),
-    getKelas(),
+    getBidangUser(),
 );
 router.post(
     '/create',
     passport.authenticate('bearer', {session: false}),
-    createNewKelas(),
+    createBidangUser(),
 );
-router.put(
-    '/:id/update',
+router.post(
+    '/:email/update',
     passport.authenticate('bearer', {session: false}),
-    updateKelas(),
+    updateBidangUser(),
 );
-router.put(
-    '/:id/updatestatus',
+router.delete(
+    '/:id/delete',
     passport.authenticate('bearer', {session: false}),
-    updateStatusKelas(),
+    deleteBidangUser(),
 );
 
-function getAllKelas() {
+function getAllBidangUser() {
   return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
-      models.kelas.findAll({
-        include: [
-          {
-            model: models.jadwal_kelas,
-            as: 'jadwal_kelas',
-          },
-          {
-            model: models.siswa,
-            as: 'list_siswa',
-          },
-        ],
-      }).then(kelas => {
-        if (kelas) {
+      models.bidang_user.findAll().then(results => {
+        if (results) {
           res.status(200).json({
             status: 'success',
-            message: 'retrieve kelas',
-            data: kelas,
+            message: 'retrieve bidang_user',
+            data: results,
           });
         }
         else if (res.status(404)) {
           res.status(404).json({
-            message: 'not found',
-          });
-        }
-        else {
-          res.json({
             status: 'failed',
-            message: 'error',
-          });
-        }
-      }).catch(err => {
-        res.json({
-          status: 'failed',
-          message: `error${err}`,
-        });
-        res.send(err);
-      });
-    } else if (req.user.length < 1 ||
-        req.user[0].dataValues.is_super_user === false) {
-      res.status(401).json({
-        status: 'failed',
-        message: 'authorization error',
-      });
-    } else {
-      res.json({
-        status: 'failed',
-        message: 'error',
-      });
-    }
-  };
-}
-
-function getKelas() {
-  return (req, res) => {
-    if (req.user.length >= 1) {
-      models.kelas.findAll({
-        where: {
-          bidang_user_id: req.params.id,
-        },
-        include: [
-          {
-            model: models.jadwal_kelas,
-            as: 'jadwal_kelas',
-          },
-          {
-            model: models.siswa,
-            as: 'list_siswa',
-          },
-        ],
-      }).then(kelas => {
-        if (kelas) {
-          res.status(200).json({
-            status: 'success',
-            message: 'retrieve kelas',
-            data: kelas,
-          });
-        }
-        else if (res.status(404)) {
-          res.status(404).json({
             message: 'not found',
           });
         }
@@ -141,27 +76,64 @@ function getKelas() {
   };
 }
 
-function createNewKelas() {
+function getBidangUser() {
+  return (req, res) => {
+    if (req.user.length >= 1) {
+      models.bidang_user.findAll({
+        where: {
+          user_email: req.params.email,
+        },
+      }).then(results => {
+        if (results) {
+          res.status(200).json({
+            status: 'success',
+            message: 'retrieve bidang_user',
+            data: results,
+          });
+        }
+        else if (res.status(404)) {
+          res.status(404).json({
+            status: 'failed',
+            message: 'not found',
+          });
+        }
+        else {
+          res.json({
+            status: 'failed',
+            message: 'error',
+          });
+        }
+      }).catch(err => {
+        res.json({
+          status: 'failed',
+          message: `error${err}`,
+        });
+        res.send(err);
+      });
+    } else if (req.user.length < 1 ||
+        req.user[0].dataValues.is_super_user === false) {
+      res.status(401).json({
+        status: 'failed',
+        message: 'authorization error',
+      });
+    } else {
+      res.json({
+        status: 'failed',
+        message: 'error',
+      });
+    }
+  };
+}
+
+function createBidangUser() {
   return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
-      models.kelas.create(
-          req.body.kelas,
-          {
-            include: [
-              {
-                model: models.jadwal_kelas,
-                as: 'jadwal_kelas',
-              },
-              {
-                model: models.siswa,
-                as: 'list_siswa',
-              },
-            ],
-          },
+      models.bidang_user.create(
+          req.body.bidang_user,
       ).then(() => {
         res.status(200).json({
           status: 'success',
-          message: 'new kelas added',
+          message: 'new bidang_user added',
           data: true,
         });
       }).catch(err => {
@@ -186,15 +158,19 @@ function createNewKelas() {
   };
 }
 
-function updateKelas() {
+function updateBidangUser() {
   return (req, res) => {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
-      models.kelas.findById(req.params.id).then(kelas => {
-        if (kelas) {
-          kelas.update(req.body.kelas).then(() => {
+      models.bidang_user.findAll({
+        where: {
+          user_email: req.params.email,
+        },
+      }).then(bu => {
+        if (bu) {
+          bu.update(req.body.bidang_user).then(() => {
             res.status(200).json({
               status: 'success',
-              message: 'kelas updated',
+              message: 'bidang_user updated',
               data: true,
             });
           }).catch(err => {
@@ -203,6 +179,16 @@ function updateKelas() {
               message: `error${err}`,
             });
             res.send(err);
+          });
+        } else if (res.status(404)) {
+          res.status(404).json({
+            message: 'not found',
+          });
+        }
+        else {
+          res.json({
+            status: 'failed',
+            message: 'error',
           });
         }
       }).catch(err => {
@@ -227,27 +213,19 @@ function updateKelas() {
   };
 }
 
-function updateStatusKelas() {
+function deleteBidangUser() {
   return (req, res) => {
-    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
-      models.kelas.findById(req.params.id).then(kelas => {
-        if (kelas) {
-          kelas.update({
-            is_active: !kelas.is_active,
-          }).then(() => {
-            res.status(200).json({
-              status: 'success',
-              message: 'kelas status updated',
-              data: true,
-            });
-          }).catch(err => {
-            res.json({
-              status: 'failed',
-              message: `error${err}`,
-            });
-            res.send(err);
-          });
-        }
+    if (req.user.length >= 1) {
+      models.bidang_user.destroy({
+        where: {
+          id: req.params.id,
+        },
+      }).then(() => {
+        res.status(200).json({
+          status: 'success',
+          message: 'bidang_user deleted',
+          data: true,
+        });
       }).catch(err => {
         res.json({
           status: 'failed',
@@ -255,8 +233,7 @@ function updateStatusKelas() {
         });
         res.send(err);
       });
-    } else if (req.user.length < 1 ||
-        req.user[0].dataValues.is_super_user === false) {
+    } else if (req.user.length < 1) {
       res.status(401).json({
         status: 'failed',
         message: 'authorization error',
@@ -269,7 +246,5 @@ function updateStatusKelas() {
     }
   };
 }
-
-//todo changes all system error to common error message at release
 
 module.exports = router;
