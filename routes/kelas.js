@@ -9,7 +9,7 @@ router.get(
     getAllKelas(),
 );
 router.get(
-    '/:id',
+    '/:email',
     passport.authenticate('bearer', {session: false}),
     getKelas(),
 );
@@ -89,7 +89,7 @@ function getKelas() {
     if (req.user.length >= 1) {
       models.kelas.findAll({
         where: {
-          bidang_user_id: req.params.id,
+          user_email: req.params.email,
         },
         include: [
           {
