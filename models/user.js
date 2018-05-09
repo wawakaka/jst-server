@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
 
   User.associate = models => {
     User.hasMany(models.pengeluaran);
-    User.belongsToMany(models.bidang, {through: 'bidang_user'});
+    User.hasMany(models.kelas, {as: 'list_kelas'});
   };
 
   return User;

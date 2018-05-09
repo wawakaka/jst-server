@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Bidang.associate = models => {
-    Bidang.belongsToMany(models.user, {through: 'bidang_user'});
+    Bidang.hasMany(models.kelas);
   };
 
   return Bidang;
