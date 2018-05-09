@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     Kelas.belongsTo(models.event);
     Kelas.belongsTo(models.bidang);
     Kelas.hasMany(models.siswa, {as: 'list_siswa'});
+    Kelas.hasMany(models.jadwal_kelas, {as: 'jadwal_kelas'});
   };
 
   return Kelas;
