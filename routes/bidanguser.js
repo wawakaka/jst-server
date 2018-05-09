@@ -12,7 +12,7 @@ router.get(
     getAllBidangUser(),
 );
 router.get(
-    '/:id',
+    '/:email',
     passport.authenticate('bearer', {session: false}),
     getBidangUser(),
 );
@@ -22,7 +22,7 @@ router.post(
     createBidangUser(),
 );
 router.post(
-    '/:email/update',
+    '/:id/update',
     passport.authenticate('bearer', {session: false}),
     updateBidangUser(),
 );
@@ -163,7 +163,7 @@ function updateBidangUser() {
     if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
       models.bidang_user.findAll({
         where: {
-          user_email: req.params.email,
+          id: req.params.id,
         },
       }).then(bu => {
         if (bu) {
