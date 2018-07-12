@@ -13,6 +13,11 @@ router.get(
     passport.authenticate('bearer', {session: false}),
     getKelas(),
 );
+router.get(
+    '/event/:event_id',
+    passport.authenticate('bearer', {session: false}),
+    getKelasByEvent(),
+);
 router.post(
     '/create',
     passport.authenticate('bearer', {session: false}),
@@ -90,6 +95,63 @@ function getKelas() {
       models.kelas.findAll({
         where: {
           user_email: req.params.email,
+        },
+        include: [
+          {
+            model: models.jadwal_kelas,
+            as: 'jadwal_kelas',
+          },
+          {
+            model: models.siswa,
+            as: 'list_siswa',
+          },
+        ],
+      }).then(kelas => {
+        if (kelas) {
+          res.status(200).json({
+            status: 'success',
+            message: 'retrieve kelas',
+            data: kelas,
+          });
+        }
+        else if (res.status(404)) {
+          res.status(404).json({
+            message: 'not found',
+          });
+        }
+        else {
+          res.json({
+            status: 'failed',
+            message: 'error',
+          });
+        }
+      }).catch(err => {
+        res.json({
+          status: 'failed',
+          message: `error${err}`,
+        });
+        res.send(err);
+      });
+    } else if (req.user.length < 1) {
+      res.status(401).json({
+        status: 'failed',
+        message: 'authorization error',
+      });
+    } else {
+      res.json({
+        status: 'failed',
+        message: 'error',
+      });
+    }
+  };
+}
+
+function getKelasByEvent() {
+  return (req, res) => {
+    if (req.user.length >= 1) {
+      models.kelas.findAll({
+        where: {
+          event_id: req.params.event_id,
         },
         include: [
           {
