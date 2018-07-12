@@ -3,12 +3,12 @@ const passport = require('passport');
 const router = express.Router();
 const models = require('../models');
 const Json2csvParser = require('json2csv').Parser;
-const fields = ['nama'];
+const fields = ['bidang_nama'];
 const json2csvParser = new Json2csvParser({fields});
 
-router.get('/download',
-    passport.authenticate('bearer', {session: false}),
-    downloadCsv());
+router.get('/:email/download',
+    downloadCsv()
+);
 router.get(
     '/all',
     passport.authenticate('bearer', {session: false}),
@@ -27,32 +27,25 @@ router.delete(
 
 function downloadCsv() {
   return (req, res) => {
-    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
-      models.bidang.findAll().then(results => {
-        const csv = json2csvParser.parse(results);
-        res.setHeader('Content-disposition',
-            'attachment; filename=bidang.csv');
-        res.set('Content-Type', 'text/csv');
-        res.status(200).send(csv);
-      }).catch(err => {
-        res.json({
-          status: 'failed',
-          message: `error ${err}`,
-        });
-        res.send(err);
-      });
-    } else if (req.user.length < 1 ||
-        req.user[0].dataValues.is_super_user === false) {
-      res.status(401).json({
-        status: 'failed',
-        message: 'authorization error',
-      });
-    } else {
+    models.kelas.findAll({
+      attributes: ['bidang_nama'],
+      where: {
+        user_email: req.params.email,
+      },
+    }).then(results => {
+      console.log(results);
+      const csv = json2csvParser.parse(results);
+      res.setHeader('Content-disposition',
+          'attachment; filename=bidang.csv');
+      res.set('Content-Type', 'text/csv');
+      res.status(200).send(csv);
+    }).catch(err => {
       res.json({
         status: 'failed',
-        message: 'error',
+        message: `error ${err}`,
       });
-    }
+      res.send(err);
+    });
   };
 }
 

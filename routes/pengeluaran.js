@@ -2,7 +2,13 @@ const express = require('express');
 const passport = require('passport');
 const router = express.Router();
 const models = require('../models');
+const Json2csvParser = require('json2csv').Parser;
+const fields = ['tanggal', 'barang', 'biaya', 'keterangan', 'gambar'];
+const json2csvParser = new Json2csvParser({fields});
 
+router.get('/:event_id/download',
+    downloadCsv()
+);
 router.get('/all',
     passport.authenticate('bearer', {session: false}),
     getAllPengeluaran()
@@ -23,6 +29,29 @@ router.delete('/:id/delete',
     passport.authenticate('bearer', {session: false}),
     deletePengeluaran()
 );
+
+function downloadCsv() {
+  return (req, res) => {
+    models.pengeluaran.findAll({
+      where: {
+        event_id: req.params.event_id,
+      },
+    }).then(results => {
+      console.log(results);
+      const csv = json2csvParser.parse(results);
+      res.setHeader('Content-disposition',
+          'attachment; filename=pengeluaran.csv');
+      res.set('Content-Type', 'text/csv');
+      res.status(200).send(csv);
+    }).catch(err => {
+      res.json({
+        status: 'failed',
+        message: `error ${err}`,
+      });
+      res.send(err);
+    });
+  };
+}
 
 function getAllPengeluaran() {
   return (req, res) => {

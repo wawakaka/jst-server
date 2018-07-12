@@ -2,13 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const router = express.Router();
 const models = require('../models');
-const Json2csvParser = require('json2csv').Parser;
-const fields = ['id', 'hasil'];
-const json2csvParser = new Json2csvParser({fields});
 
-router.get('/:id/download',
-    passport.authenticate('bearer', {session: false}),
-    downloadCsv());
 router.get('/:id',
     passport.authenticate('bearer', {session: false}),
     getHasilTesHarian(),
@@ -21,41 +15,6 @@ router.put('/:id/update',
     passport.authenticate('bearer', {session: false}),
     updateSingleHasilTesHarian(),
 );
-
-function downloadCsv() {
-  return (req, res) => {
-    if (req.user.length >= 1 && req.user[0].dataValues.is_super_user === true) {
-      models.hasil_tes_harian.findAll({
-        where: {
-          tes_harian_id: req.params.id,
-        },
-      }).then(results => {
-        const csv = json2csvParser.parse(results);
-        res.setHeader('Content-disposition',
-            'attachment; filename=hasil_tes_harian.csv');
-        res.set('Content-Type', 'text/csv');
-        res.status(200).send(csv);
-      }).catch(err => {
-        res.json({
-          status: 'failed',
-          message: `error ${err}`,
-        });
-        res.send(err);
-      });
-    } else if (req.user.length < 1 ||
-        req.user[0].dataValues.is_super_user === false) {
-      res.status(401).json({
-        status: 'failed',
-        message: 'authorization error',
-      });
-    } else {
-      res.json({
-        status: 'failed',
-        message: 'error',
-      });
-    }
-  };
-}
 
 function getHasilTesHarian() {
   return (req, res) => {

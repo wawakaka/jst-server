@@ -2,9 +2,6 @@ const express = require('express');
 const passport = require('passport');
 const router = express.Router();
 const models = require('../models');
-const Json2csvParser = require('json2csv').Parser;
-const fields = ['nama'];
-const json2csvParser = new Json2csvParser({fields});
 
 router.get(
     '/all',
