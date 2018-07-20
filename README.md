@@ -5,16 +5,22 @@
   <a href="https://david-dm.org/wawakaka/jst-server?type=dev" title="devDependencies status"><img src="https://david-dm.org/wawakaka/jst-server/dev-status.svg"/></a>
 </p>
 
-This repository Lorem Ipsum is simply dummy 
-text of the printing and typesetting industry. 
-Lorem Ipsum has been the industry's standard dummy 
-text ever since the 1500s, when an unknown printer 
-took a galley of type and scrambled it to make 
-a type specimen book. It has survived not only five 
-centuries, but also the leap into electronic 
-typesetting, remaining essentially unchanged. 
-It was popularised in the 1960s with the 
-release of Letraset sheets containing 
-Lorem Ipsum passages, and more recently with 
-desktop publishing software like Aldus PageMaker 
-including versions of Lorem Ipsum.
+# Before you run this app
+
+- You need to have Node js installed
+
+- You need to have postgresql installed otherwise you need to change file `/models/index.js` to change to other database
+
+- You need to add this to your environment variables</br>
+  `DB="your database name"`</br>
+  `DB_USER="your database username"`</br>
+  `DB_PASS="your database password"`</br>
+  `DB_HOST="your database address"`</br>
+
+- Run `npm install` to get all dependency
+
+- Run 'npm run start' to start this app
+
+- To run this app as a service you need to install PM2</br>
+  with this command `npm install pm2 -g`</br>
+  and run this command `pm2 start bin/www`
