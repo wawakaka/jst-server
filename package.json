@@ -21,7 +21,7 @@
     "passport-http-bearer": "^1.0.1",
     "pg": "^7.4.1",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^4.36.1",
+    "sequelize": "^5.3.0",
     "serve-favicon": "~2.4.2",
     "tedious": "^2.6.1"
   },
