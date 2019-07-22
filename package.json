@@ -7,7 +7,7 @@
     "start-dev": "babel-node ./bin/www --presets es2015,stage-2"
   },
   "dependencies": {
-    "body-parser": "^1.18.2",
+    "body-parser": "^1.19.0",
     "cookie-parser": "~1.4.3",
     "debug": "~3.1.0",
     "dotenv": "^5.0.1",
