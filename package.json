@@ -20,7 +20,7 @@
     "passport": "^0.4.0",
     "passport-http-bearer": "^1.0.1",
     "pg": "^7.11.0",
-    "pg-hstore": "^2.3.2",
+    "pg-hstore": "^2.3.4",
     "sequelize": "^5.10.1",
     "serve-favicon": "~2.4.2",
     "tedious": "^2.6.1"
